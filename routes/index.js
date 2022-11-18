@@ -1,7 +1,7 @@
 const express = require('express');
 const { ensureAuth, ensureGuest } = require('../middleware/auth');
 const router = express.Router();
-const schema = require('./schema');
+// const schema = require('./schema');
 
 // @desc Login/Landing page
 // @route GET /
@@ -18,6 +18,6 @@ router.get('/Dashboard', ensureAuth, (req, res) => {
   });
 });
 
-router.use('/graphql', schema);
+// router.use('/graphql', schema);
 
 module.exports = router;
