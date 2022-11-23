@@ -1,5 +1,5 @@
 const appConfig = require("../config/app");
-const User = require("../models/user");
+const User = require("../models/User");
 
 const loadUser = async (req, res, next) => {
   if (!req.headers.authorization) {
