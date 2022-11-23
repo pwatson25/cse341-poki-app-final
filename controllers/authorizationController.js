@@ -9,7 +9,7 @@ const AuthorizationController = {
     }&redirect_uri=${encodeURIComponent(
       appConfig.redirectUri
     )}&state=1234&scope=openid%20profile%20email`;
-    console.log(authorizationUrl);
+
     res.redirect(authorizationUrl);
   },
   callback: async (req, res) => {
