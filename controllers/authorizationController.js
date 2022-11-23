@@ -1,4 +1,4 @@
-const appConfig = require("../config/app");
+const appConfig = require('../config/app');
 
 const AuthorizationController = {
   login: (req, res) => {
@@ -9,21 +9,21 @@ const AuthorizationController = {
     }&redirect_uri=${encodeURIComponent(
       appConfig.redirectUri
     )}&state=1234&scope=openid%20profile%20email`;
-
+    console.log(authorizationUrl);
     res.redirect(authorizationUrl);
   },
   callback: async (req, res) => {
     const response = await fetch(`${appConfig.authorizationHost}/oauth/token`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
-        grant_type: "authorization_code",
+        grant_type: 'authorization_code',
         client_id: appConfig.clientID,
         client_secret: appConfig.clientSecret,
         redirect_uri: appConfig.redirectUri,
-        scope: "openid profile email",
+        scope: 'openid profile email',
         code: req.query.code,
       }),
     });
