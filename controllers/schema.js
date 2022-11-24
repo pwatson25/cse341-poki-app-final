@@ -1,9 +1,9 @@
-const graphql = require("graphql");
-const { createImportSpecifier } = require("typescript");
-const appConfig = require("../config/app");
-const Item = require("../models/item.js");
-const Move = require("../models/move.js");
-const Pokemon = require("../models/pokemon.js");
+const graphql = require('graphql');
+const { createImportSpecifier } = require('typescript');
+const appConfig = require('../config/app');
+const Item = require('../models/item.js');
+const Move = require('../models/move.js');
+const Pokemon = require('../models/pokemon.js');
 
 const {
   GraphQLObjectType,
@@ -16,15 +16,73 @@ const {
 } = graphql;
 
 const DetailsType = new GraphQLObjectType({
-  name: "DetailsType",
+  name: 'DetailsType',
   fields: () => ({
     name: { type: GraphQLString },
     url: { type: GraphQLString },
   }),
 });
 
+const EffectEntriesType = new GraphQLObjectType({
+  name: 'EffectEntriesType',
+  fields: () => ({
+    effect: { type: GraphQLString },
+    language: { type: DetailsType },
+    short_effect: { type: GraphQLString },
+  }),
+});
+
+const ContestCombosType = new GraphQLObjectType({
+  name: 'ContestCombosType',
+  fields: () => ({
+    normal: { type: ContestCombosTypeDetail },
+    super: { type: ContestCombosTypeDetail },
+  }),
+});
+
+const ContestCombosTypeDetail = new GraphQLObjectType({
+  name: 'ContestCombosTypeDetail',
+  fields: () => ({
+    user_after: { type: UserAfterBeforeType },
+    user_after: { type: UserAfterBeforeType },
+  }),
+});
+
+const UserAfterBeforeType = new GraphQLObjectType({
+  name: 'UserAfterBeforeType',
+  fields: () => ({
+    user_before: { type: DetailsType },
+    user_before: { type: DetailsType },
+  }),
+});
+
+const ConetstEffectType = new GraphQLObjectType({
+  name: 'ConetstEffectType',
+  fields: () => ({
+    url: { type: GraphQLString },
+  }),
+});
+
+const MoveMetaType = new GraphQLObjectType({
+  name: 'MoveMetaType',
+  fields: () => ({
+    ailment: { type: DetailsType },
+    ailment_chance: { type: GraphQLInt },
+    category: { type: DetailsType },
+    crit_rate: { type: GraphQLInt },
+    drain: { type: GraphQLInt },
+    flinch_chance: { type: GraphQLInt },
+    healing: { type: GraphQLInt },
+    max_hits: { type: GraphQLInt },
+    max_turns: { type: GraphQLInt },
+    min_hits: { type: GraphQLInt },
+    min_turns: { type: GraphQLInt },
+    stat_chance: { type: GraphQLInt },
+  }),
+});
+
 const ItemType = new GraphQLObjectType({
-  name: "Item",
+  name: 'Item',
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
@@ -32,11 +90,7 @@ const ItemType = new GraphQLObjectType({
     fling_power: { type: DetailsType },
     fling_effect: { type: DetailsType },
     attributes: { type: DetailsType },
-    effect_entries: {
-      effect: { type: GraphQLString },
-      language: { type: DetailsType },
-      short_effect: { type: GraphQLString },
-    },
+    effect_entries: { type: EffectEntriesType },
     held_by_pokemon: { type: DetailsType },
     baby_trigger_for: { type: DetailsType },
     machines: { type: DetailsType },
@@ -44,7 +98,7 @@ const ItemType = new GraphQLObjectType({
 });
 
 const MoveType = new GraphQLObjectType({
-  name: "Move",
+  name: 'Move',
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
@@ -53,57 +107,19 @@ const MoveType = new GraphQLObjectType({
     pp: { type: GraphQLInt },
     priority: { type: GraphQLInt },
     power: { type: GraphQLInt },
-    contest_combos: {
-      normal: {
-        user_after: {
-          user_before: { type: DetailsType },
-          user_before: { type: DetailsType },
-        },
-      },
-      super: {
-        user_after: {
-          user_before: { type: DetailsType },
-          user_before: { type: DetailsType },
-        },
-      },
-    },
+    contest_combos: { type: ContestCombosType },
     contest_type: { type: DetailsType },
-    contest_effect: {
-      url: { type: GraphQLString },
-    },
+    contest_effect: { type: ConetstEffectType },
     damage_class: { type: DetailsType },
-    effect_entries: {
-      effect: { type: GraphQLString },
-      language: { type: DetailsType },
-      short_effect: { type: GraphQLString },
-    },
-    effect_changes: {
-      effect: { type: GraphQLString },
-      language: { type: DetailsType },
-      short_effect: { type: GraphQLString },
-    },
+    effect_entries: { type: EffectEntriesType },
+    effect_changes: { type: EffectEntriesType },
     learned_by_pokemon: { type: DetailsType },
     generation: { type: DetailsType },
     machines: { type: DetailsType },
-    meta: {
-      ailment: { type: DetailsType },
-      ailment_chance: { type: GraphQLInt },
-      category: { type: DetailsType },
-      crit_rate: { type: GraphQLInt },
-      drain: { type: GraphQLInt },
-      flinch_chance: { type: GraphQLInt },
-      healing: { type: GraphQLInt },
-      max_hits: { type: GraphQLInt },
-      max_turns: { type: GraphQLInt },
-      min_hits: { type: GraphQLInt },
-      min_turns: { type: GraphQLInt },
-      stat_chance: { type: GraphQLInt },
-    },
+    meta: { type: MoveMetaType },
     past_values: { type: DetailsType },
     stat_changes: { type: DetailsType },
-    super_contest_effect: {
-      url: { type: GraphQLString },
-    },
+    super_contest_effect: { type: ConetstEffectType },
     target: { type: DetailsType },
     type: { type: DetailsType },
   }),
@@ -152,8 +168,8 @@ const MoveType = new GraphQLObjectType({
 // root query is used to perform READ operations
 
 const RootQuery = new GraphQLObjectType({
-  name: "RootQueryType",
-  description: "All GET-type queries.",
+  name: 'RootQueryType',
+  description: 'All GET-type queries.',
   fields: {
     getOneItem: {
       description: "Find one item. Requires the item's ID",
@@ -201,14 +217,14 @@ const RootQuery = new GraphQLObjectType({
     //   },
     // },
     getAllItems: {
-      description: "Returns all items.",
+      description: 'Returns all items.',
       type: new graphql.GraphQLList(ItemType),
       resolve: async (root, args, context, info) => {
         return Item.find({});
       },
     },
     getAllMoves: {
-      description: "Returns all moves.",
+      description: 'Returns all moves.',
       type: new graphql.GraphQLList(MoveType),
       resolve: async (root, args, context, info) => {
         return Move.find({});
@@ -226,12 +242,12 @@ const RootQuery = new GraphQLObjectType({
 
 // Create Update Delete operations
 const Mutation = new GraphQLObjectType({
-  name: "Mutation",
+  name: 'Mutation',
   description:
     "Used for making CREATE, PUT, and DELETE queries. All queries require an Authorization header of type: 'Authorization: Bearer xxxx.yyyy.zzzz'",
   fields: {
     addOneItem: {
-      description: "",
+      description: '',
       type: ItemType,
       args: {
         // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
@@ -259,7 +275,7 @@ const Mutation = new GraphQLObjectType({
       },
     },
     addOneMove: {
-      description: "",
+      description: '',
       type: MoveType,
       args: {
         // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
@@ -315,7 +331,7 @@ const Mutation = new GraphQLObjectType({
     //   },
     // },
     updateOneItem: {
-      description: "",
+      description: '',
       type: ItemType,
       args: {
         // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
@@ -360,7 +376,7 @@ const Mutation = new GraphQLObjectType({
       },
     },
     updateOneMove: {
-      description: "",
+      description: '',
       type: MoveType,
       args: {
         // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
@@ -450,7 +466,7 @@ const Mutation = new GraphQLObjectType({
     //   },
     // },
     removeOneItem: {
-      description: "",
+      description: '',
       type: ItemType,
       args: {
         id: { type: GraphQLID },
@@ -470,7 +486,7 @@ const Mutation = new GraphQLObjectType({
       },
     },
     removeOneMove: {
-      description: "",
+      description: '',
       type: MoveType,
       args: {
         id: { type: GraphQLID },
