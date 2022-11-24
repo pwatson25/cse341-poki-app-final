@@ -1,447 +1,519 @@
 const graphql = require("graphql");
 const { createImportSpecifier } = require("typescript");
-const CustomArmor = require("../models/custom-armor");
-const CustomGear = require("../models/custom-gear");
 const appConfig = require("../config/app");
+const User = require("../models/user.js");
+const Item = require("../models/item.js");
+const Move = require("../models/move.js");
+const Pokemon = require("../models/pokemon.js");
 
 const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLID,
   GraphQLInt,
-  GraphQLBoolean,
   GraphQLSchema,
-  GraphQLEnumType,
+  GraphQLBoolean,
+  GraphQLList,
 } = graphql;
 
-const CostTypeEnumType = new GraphQLEnumType({
-  name: "CostEnumType",
-  values: {
-    CP: {
-      value: "cp",
-    },
-    SP: {
-      value: "sp",
-    },
-    EP: {
-      value: "ep",
-    },
-    GP: {
-      value: "gp",
-    },
-    PP: {
-      value: "pp",
-    },
-  },
-});
-
-const ArmorType = new GraphQLObjectType({
-  name: "CustomArmor",
+const DetailsType = new GraphQLObjectType({
+  name: "DetailsType",
   fields: () => ({
-    id: { type: GraphQLID },
     name: { type: GraphQLString },
-    armorType: { type: GraphQLString },
-    ac: { type: GraphQLInt },
-    dexBonus: { type: GraphQLString },
-    stealthDis: { type: GraphQLBoolean },
-    cost: { type: GraphQLInt },
-    costType: { type: CostTypeEnumType },
-    weight: { type: GraphQLInt },
-    strengthRqr: { type: GraphQLInt },
-    description: { type: GraphQLString },
-    creator_id: { type: GraphQLString },
+    url: { type: GraphQLString },
   }),
 });
 
-const GearType = new GraphQLObjectType({
-  name: "CustomGear",
+const ItemType = new GraphQLObjectType({
+  name: "Item",
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     cost: { type: GraphQLInt },
-    costType: { type: CostTypeEnumType },
-    weight: { type: GraphQLInt },
-    description: { type: GraphQLString },
-    creator_id: { type: GraphQLString },
+    fling_power: { type: DetailsType },
+    fling_effect: { type: DetailsType },
+    attributes: { type: DetailsType },
+    effect_entries: {
+      effect: { type: GraphQLString },
+      language: { type: DetailsType },
+      short_effect: { type: GraphQLString },
+    },
+    held_by_pokemon: { type: DetailsType },
+    baby_trigger_for: { type: DetailsType },
+    machines: { type: DetailsType },
   }),
 });
 
-// root query to get all gear, all armor, or one gear or one armor.
+const MoveType = new GraphQLObjectType({
+  name: "Move",
+  fields: () => ({
+    id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    accuracy: { type: GraphQLInt },
+    effect_chance: { type: GraphQLInt },
+    pp: { type: GraphQLInt },
+    priority: { type: GraphQLInt },
+    power: { type: GraphQLInt },
+    contest_combos: {
+      normal: {
+        user_after: {
+          user_before: { type: DetailsType },
+          user_before: { type: DetailsType },
+        },
+      },
+      super: {
+        user_after: {
+          user_before: { type: DetailsType },
+          user_before: { type: DetailsType },
+        },
+      },
+    },
+    contest_type: { type: DetailsType },
+    contest_effect: {
+      url: { type: GraphQLString },
+    },
+    damage_class: { type: DetailsType },
+    effect_entries: {
+      effect: { type: GraphQLString },
+      language: { type: DetailsType },
+      short_effect: { type: GraphQLString },
+    },
+    effect_changes: {
+      effect: { type: GraphQLString },
+      language: { type: DetailsType },
+      short_effect: { type: GraphQLString },
+    },
+    learned_by_pokemon: { type: DetailsType },
+    generation: { type: DetailsType },
+    machines: { type: DetailsType },
+    meta: {
+      ailment: { type: DetailsType },
+      ailment_chance: { type: GraphQLInt },
+      category: { type: DetailsType },
+      crit_rate: { type: GraphQLInt },
+      drain: { type: GraphQLInt },
+      flinch_chance: { type: GraphQLInt },
+      healing: { type: GraphQLInt },
+      max_hits: { type: GraphQLInt },
+      max_turns: { type: GraphQLInt },
+      min_hits: { type: GraphQLInt },
+      min_turns: { type: GraphQLInt },
+      stat_chance: { type: GraphQLInt },
+    },
+    past_values: { type: DetailsType },
+    stat_changes: { type: DetailsType },
+    super_contest_effect: {
+      url: { type: GraphQLString },
+    },
+    target: { type: DetailsType },
+    type: { type: DetailsType },
+  }),
+});
+
+const MoveListType = new GraphQLObjectType({
+  name: "MoveListType",
+  fields: () => ({
+    move: { type: DetailsType },
+  }),
+});
+
+const PokemonType = new GraphQLObjectType({
+  name: "Pokemon",
+  fields: () => ({
+    id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    base_experience: { type: GraphQLInt },
+    height: { type: GraphQLInt },
+    is_default: { type: GraphQLBoolean },
+    order: { type: GraphQLInt },
+    weight: { type: GraphQLInt },
+    abilities: {
+      ability: { type: DetailsType },
+      is_hidden: { type: GraphQLBoolean },
+      slot: { type: GraphQLInt },
+    },
+    forms: { type: DetailsType },
+    held_items: {
+      item: { type: DetailsType },
+    },
+    location_area_encounters: { type: GraphQLString },
+    moves: { type: GraphQLList(MoveListType) },
+    past_types: {
+      slot: { type: GraphQLInt },
+      type: { type: DetailsType },
+    },
+    species: { type: DetailsType },
+    types: {
+      slot: { type: GraphQLInt },
+      type: { type: DetailsType },
+    },
+  }),
+});
+const UserType = new GraphQLObjectType({
+  name: "User",
+  fields: () => ({
+    identifier: { type: GraphQLString },
+    email: { type: GraphQLString },
+    givenName: { type: GraphQLString },
+    familyName: { type: GraphQLString },
+    locale: { type: GraphQLString },
+    picture: { type: GraphQLString },
+  }),
+});
+
+// root query is used to perform READ operations
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
-  description:
-    "All GET-type queries. All queries require an Authorization header of type: 'Authorization: Bearer xxxx.yyyy.zzzz'",
+  description: "All GET-type queries.",
   fields: {
-    gear: {
-      description:
-        "Requires the item _id of the item you're requesting, returns one item. Returns null if no items match your account identifier",
-      type: GearType,
+    getOneItem: {
+      description: "Find one item. Requires the item's ID",
+      type: ItemType,
       args: { id: { type: GraphQLID } },
       resolve: async (root, args, context, info) => {
         try {
-          // check that the item exists for the user
-          let foundGear = CustomGear.findOne({
+          let foundItem = Item.findOne({
             _id: args.id,
-            creator_id: context.identifier,
           });
-          return foundGear;
+          return foundItem;
         } catch (err) {
           throw err;
         }
       },
     },
-    all_gear: {
-      description:
-        "Returns all entries in the CustomGear collection that the current user has created. Returns null if no items match your account identifier",
-      type: new graphql.GraphQLList(GearType),
-      resolve: async (root, args, context, info) => {
-        return CustomGear.find({ creator_id: context.identifier });
-      },
-    },
-    armor: {
-      description:
-        "Requires the item _id of the item you're requesting, returns one item. Returns null if no items match your account identifier",
-      type: ArmorType,
+    getOneMove: {
+      description: "Find one item. Requires the move's ID",
+      type: MoveType,
       args: { id: { type: GraphQLID } },
       resolve: async (root, args, context, info) => {
         try {
-          // check that the item exists for the user
-          let foundArmor = CustomArmor.findOne({
+          let foundMove = Move.findOne({
             _id: args.id,
-            creator_id: context.identifier,
           });
-          return foundArmor;
+          return foundMove;
         } catch (err) {
           throw err;
         }
       },
     },
-    all_armor: {
-      description:
-        "Returns all entries in the CustomArmor collection that the current user has created. Returns null if no items match your account identifier",
-      type: new graphql.GraphQLList(ArmorType),
+    getOnePokemon: {
+      description: "Find one item. Requires the pokemon's ID",
+      type: PokemonType,
+      args: { id: { type: GraphQLID } },
       resolve: async (root, args, context, info) => {
-        return CustomArmor.find({ creator_id: context.identifier });
+        try {
+          let foundPokemon = Pokemon.findOne({
+            _id: args.id,
+          });
+          return foundPokemon;
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
+    getAllItems: {
+      description: "Returns all items.",
+      type: new graphql.GraphQLList(ItemType),
+      resolve: async (root, args, context, info) => {
+        return Item.find({});
+      },
+    },
+    getAllMoves: {
+      description: "Returns all moves.",
+      type: new graphql.GraphQLList(MoveType),
+      resolve: async (root, args, context, info) => {
+        return Move.find({});
+      },
+    },
+    getAllPokemon: {
+      description: "Returns all Pokemon",
+      type: new graphql.GraphQLList(PokemonType),
+      resolve: async (root, args, context, info) => {
+        return Pokemon.find({});
       },
     },
   },
 });
 
-// CRUD operations
+// Create Update Delete operations
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   description:
     "Used for making CREATE, PUT, and DELETE queries. All queries require an Authorization header of type: 'Authorization: Bearer xxxx.yyyy.zzzz'",
   fields: {
-    addGear: {
-      description:
-        "Create a new Custom Gear item and add it to the CustomGear collection. Requires all fields to be entered",
-      type: GearType,
+    addOneItem: {
+      description: "",
+      type: ItemType,
       args: {
-        name: { type: new graphql.GraphQLNonNull(GraphQLString) },
-        cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
-        costType: { type: new graphql.GraphQLNonNull(CostTypeEnumType) },
-        weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
-        description: { type: new graphql.GraphQLNonNull(GraphQLString) },
+        // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
+        // cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+        // costType: { type: new graphql.GraphQLNonNull(CostTypeEnumType) },
+        // weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+        // description: { type: new graphql.GraphQLNonNull(GraphQLString) },
       },
       resolve: async (root, args, context, info) => {
         try {
-          const gear = new CustomGear({
-            name: args.name,
-            cost: args.cost,
-            costType: args.costType,
-            weight: args.weight,
-            description: args.description,
-            creator_id: context.identifier,
-          });
-          const newGear = await gear.save();
-          return { ...newGear._doc, _id: newGear.id };
+          // const item = new Item({
+          //   populate the mongoDB item with args
+          //   name: args.name,
+          //   cost: args.cost,
+          //   costType: args.costType,
+          //   weight: args.weight,
+          //   description: args.description,
+          //   creator_id: context.identifier,
+          // });
+          // const newItem = await item.save();
+          // return { ...newItem._doc, _id: newItem.id };
         } catch (err) {
           throw err;
         }
       },
     },
-    addArmor: {
-      description:
-        "Create a new Custom Armor item and add it to the CustomArmor collection. Requires all fields to be entered",
-      type: ArmorType,
+    addOneMove: {
+      description: "",
+      type: MoveType,
       args: {
-        name: { type: new graphql.GraphQLNonNull(GraphQLString) },
-        armorType: { type: new graphql.GraphQLNonNull(GraphQLString) },
-        ac: { type: new graphql.GraphQLNonNull(GraphQLInt) },
-        dexBonus: { type: new graphql.GraphQLNonNull(GraphQLString) },
-        stealthDis: { type: new graphql.GraphQLNonNull(GraphQLBoolean) },
-        cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
-        costType: { type: new graphql.GraphQLNonNull(CostTypeEnumType) },
-        weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
-        strengthRqr: { type: new graphql.GraphQLNonNull(GraphQLInt) },
-        description: { type: new graphql.GraphQLNonNull(GraphQLString) },
+        // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
+        // cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+        // costType: { type: new graphql.GraphQLNonNull(CostTypeEnumType) },
+        // weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+        // description: { type: new graphql.GraphQLNonNull(GraphQLString) },
       },
       resolve: async (root, args, context, info) => {
         try {
-          let armor = new CustomArmor({
-            name: args.name,
-            armorType: args.armorType,
-            ac: args.ac,
-            dexBonus: args.dexBonus,
-            stealthDis: args.stealthDis,
-            cost: args.cost,
-            costType: args.costType,
-            weight: args.weight,
-            strengthRqr: args.strengthRqr,
-            description: args.description,
-            creator_id: context.identifier,
-          });
-          const newArmor = await armor.save();
-          return { ...newArmor._doc, _id: newArmor.id };
+          // const move = new Move({
+          // populate the mongoDB item with args
+          // name: args.name,
+          // cost: args.cost,
+          // costType: args.costType,
+          // weight: args.weight,
+          // description: args.description,
+          // creator_id: context.identifier,
+          // });
+          // const newMove = await move.save();
+          // return { ...newMove._doc, _id: newMove.id };
         } catch (err) {
           throw err;
         }
       },
     },
-    updateGear: {
-      description:
-        "Update a single Custom Gear item. Requires the item _id, returns the former fields. Throws an error if the item does not match your account identifier",
-      type: GearType,
+    addOnePokemon: {
+      description: "",
+      type: PokemonType,
       args: {
-        id: { type: graphql.GraphQLNonNull(GraphQLID) },
-        name: { type: GraphQLString },
-        cost: { type: GraphQLInt },
-        costType: { type: CostTypeEnumType },
-        weight: { type: GraphQLInt },
-        description: { type: GraphQLString },
+        // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
+        // cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+        // costType: { type: new graphql.GraphQLNonNull(CostTypeEnumType) },
+        // weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+        // description: { type: new graphql.GraphQLNonNull(GraphQLString) },
       },
-      resolve: async (parent, args, context, info) => {
+      resolve: async (root, args, context, info) => {
         try {
-          const formerGear = await CustomGear.findById(args.id);
-          if (formerGear.creator_id != context.identifier) {
-            throw new Error("The item you have entered cannot be altered");
-          }
+          // const pokemon = new Pokemon({
+          // populate the mongoDB item with args
+          // name: args.name,
+          // cost: args.cost,
+          // costType: args.costType,
+          // weight: args.weight,
+          // description: args.description,
+          // creator_id: context.identifier,
+          // });
+          // const newPokemon = await pokemon.save();
+          // return { ...newPokemon._doc, _id: newPokemon.id };
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
+    updateOneItem: {
+      description: "",
+      type: ItemType,
+      args: {
+        // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
+        // cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+        // costType: { type: new graphql.GraphQLNonNull(CostTypeEnumType) },
+        // weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+        // description: { type: new graphql.GraphQLNonNull(GraphQLString) },
+      },
+      resolve: async (root, args, context, info) => {
+        try {
+          // const formerItem = await Item.findById(args.id);
 
-          let newName = args.name;
-          let newCost = args.cost;
-          let newCostType = args.costType;
-          let newWeight = args.weight;
-          let newDesc = args.description;
+          // "args" stores the user input, use it to update Item's properties
 
-          // validation (graphql does most of it for me)
-          if (!newName) {
-            newName = formerGear.name;
-          }
-          if (!newCost) {
-            newCost = formerGear.cost;
-          }
-          if (!newCostType) {
-            newCostType = formerGear.costType;
-          }
-          if (!newWeight) {
-            newWeight = formerGear.weight;
-          }
-          if (!newDesc) {
-            newDesc = formerGear.description;
-          }
+          // validation (graphql validates type automatically,
+          // we just need to check additional restrictions
+          // and determine which fields can/can't be updated)
 
-          if (
-            newName == formerGear.name &&
-            newCost == formerGear.cost &&
-            newCostType == formerGear.costType &&
-            newWeight == formerGear.weight &&
-            newDesc == formerGear.description
-          ) {
-            throw new Error("You did not change any fields");
-          }
-
-          // after validation, find the gear and update it.
-          const updatedGear = await CustomGear.findByIdAndUpdate(args.id, {
-            name: newName,
-            cost: newCost,
-            costType: newCostType,
-            weight: newWeight,
-            description: newDesc,
-          });
+          // after validation, find the item and update it.
+          // const updatedItem = await Item.findByIdAndUpdate(args.id, {
+          // properties of Item to be updated
+          // name: newName,
+          // cost: newCost,
+          // costType: newCostType,
+          // weight: newWeight,
+          // description: newDesc,
+          // });
 
           return {
-            ...updatedGear._doc,
-            id: updatedGear.id,
-            name: updatedGear.name,
-            cost: updatedGear.cost,
-            costType: updatedGear.costType,
-            weight: updatedGear.weight,
-            description: updatedGear.description,
+            // what do we want the user to have returned? The commented out code returns various fields to the user
+            // ...updatedGear._doc,
+            // id: updatedGear.id,
+            // name: updatedGear.name,
+            // cost: updatedGear.cost,
+            // costType: updatedGear.costType,
+            // weight: updatedGear.weight,
+            // description: updatedGear.description,
           };
         } catch (err) {
           throw err;
         }
       },
     },
-    updateArmor: {
-      description:
-        "Update a single Custom Armor item. Requires the item _id, returns the former fields. Throws an error if the item does not match your account identifier",
-      type: ArmorType,
+    updateOneMove: {
+      description: "",
+      type: MoveType,
       args: {
-        id: { type: graphql.GraphQLNonNull(GraphQLID) },
-        name: { type: GraphQLString },
-        armorType: { type: GraphQLString },
-        ac: { type: GraphQLInt },
-        dexBonus: { type: GraphQLString },
-        stealthDis: { type: GraphQLBoolean },
-        cost: { type: GraphQLInt },
-        costType: { type: CostTypeEnumType },
-        weight: { type: GraphQLInt },
-        strengthRqr: { type: GraphQLInt },
-        description: { type: GraphQLString },
+        // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
+        // cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+        // costType: { type: new graphql.GraphQLNonNull(CostTypeEnumType) },
+        // weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+        // description: { type: new graphql.GraphQLNonNull(GraphQLString) },
       },
-      resolve: async (parent, args, context, info) => {
+      resolve: async (root, args, context, info) => {
         try {
-          const formerArmor = await CustomArmor.findById(args.id);
-          if (formerArmor.creator_id != context.identifier) {
-            throw new Error("The item you have entered cannot be altered");
-          }
+          // const formerMove = await Move.findById(args.id);
 
-          let newName = args.name;
-          let newArmorType = args.armorType;
-          let newAc = args.ac;
-          let newDexBonus = args.dexBonus;
-          let newStealthDis = args.stealthDis;
-          let newCost = args.cost;
-          let newCostType = args.costType;
-          let newWeight = args.weight;
-          let newStrengthRqr = args.strengthRqr;
-          let newDescription = args.description;
+          // "args" stores the user input, use it to update Item's properties
 
-          // validation (graphql does most of it for me)
-          if (!newName) {
-            newName = formerArmor.name;
-          }
-          if (!newArmorType) {
-            newArmorType = formerArmor.armorType;
-          }
-          if (!newAc) {
-            newAc = formerArmor.ac;
-          }
-          if (!newDexBonus) {
-            newDexBonus = formerArmor.dexBonus;
-          }
-          if (!newStealthDis) {
-            newStealthDis = formerArmor.stealthDis;
-          }
-          if (!newCost) {
-            newCost = formerArmor.cost;
-          }
-          if (!newCostType) {
-            newCostType = formerArmor.costType;
-          }
-          if (!newWeight) {
-            newWeight = formerArmor.weight;
-          }
-          if (newStrengthRqr) {
-            if (
-              newStrengthRqr > 20 &&
-              newStrengthRqr != formerArmor.strengthRqr
-            ) {
-              throw new Error(
-                "Error: strength requirement cannot be greater than 20"
-              );
-            } else {
-              newStrengthRqr = formerArmor.strengthRqr;
-            }
-          }
-          if (!newDescription) {
-            newDescription = formerArmor.description;
-          }
+          // validation (graphql validates type automatically,
+          // we just need to check additional restrictions
+          // and determine which fields can/can't be updated)
 
-          // check if fields were changed
-          if (
-            newName == formerArmor.name &&
-            newArmorType == formerArmor.armorType &&
-            newAc == formerArmor.ac &&
-            newDexBonus == formerArmor.dexBonus &&
-            newStealthDis == formerArmor.stealthDis &&
-            newCost == formerArmor.cost &&
-            newCostType == formerArmor.costType &&
-            newWeight == formerArmor.weight &&
-            newStrengthRqr == formerArmor.strengthRqr &&
-            newDesc == formerArmor.description
-          ) {
-            throw new Error("You did not change any fields");
-          }
-
-          // Update the armor
-          const updatedArmor = await CustomArmor.findByIdAndUpdate(args.id, {
-            name: newName,
-            armorType: newArmorType,
-            ac: newAc,
-            dexBonus: newDexBonus,
-            stealthDis: newStealthDis,
-            cost: newCost,
-            costType: newCostType,
-            weight: newWeight,
-            strengthRqr: newStrengthRqr,
-            description: newDescription,
-          });
+          // after validation, find the item and update it.
+          // const updatedMove = await Move.findByIdAndUpdate(args.id, {
+          // properties of Item to be updated
+          // name: newName,
+          // cost: newCost,
+          // costType: newCostType,
+          // weight: newWeight,
+          // description: newDesc,
+          // });
 
           return {
-            ...updatedArmor._doc,
-            id: updatedArmor.id,
-            name: updatedArmor.name,
-            armorType: updatedArmor.armorType,
-            ac: updatedArmor.ac,
-            dexBonus: updatedArmor.dexBonus,
-            stealthDis: updatedArmor.stealthDis,
-            cost: updatedArmor.cost,
-            costType: updatedArmor.costType,
-            weight: updatedArmor.weight,
-            strengthRqr: updatedArmor.strengthRqr,
-            description: updatedArmor.description,
+            // what do we want the user to have returned? The commented out code returns various fields to the user
+            // ...updatedGear._doc,
+            // id: updatedGear.id,
+            // name: updatedGear.name,
+            // cost: updatedGear.cost,
+            // costType: updatedGear.costType,
+            // weight: updatedGear.weight,
+            // description: updatedGear.description,
           };
         } catch (err) {
           throw err;
         }
       },
     },
-    removeGear: {
-      description:
-        "Delete a single Custom Gear item. Requires the item _id, returns the former id. Throws an error if the item does not match your account identifier",
-      type: GearType,
+    updateOnePokemon: {
+      description: "",
+      type: PokemonType,
+      args: {
+        // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
+        // cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+        // costType: { type: new graphql.GraphQLNonNull(CostTypeEnumType) },
+        // weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+        // description: { type: new graphql.GraphQLNonNull(GraphQLString) },
+      },
+      resolve: async (root, args, context, info) => {
+        try {
+          // const formerPokemon = await Pokemon.findById(args.id);
+
+          // "args" stores the user input, use it to update Item's properties
+
+          // validation (graphql validates type automatically,
+          // we just need to check additional restrictions
+          // and determine which fields can/can't be updated)
+
+          // after validation, find the item and update it.
+          // const updatedPokemon = await Pokemon.findByIdAndUpdate(args.id, {
+          // properties of Item to be updated
+          // name: newName,
+          // cost: newCost,
+          // costType: newCostType,
+          // weight: newWeight,
+          // description: newDesc,
+          // });
+
+          return {
+            // what do we want the user to have returned? The commented out code returns various fields to the user
+            // ...updatedGear._doc,
+            // id: updatedGear.id,
+            // name: updatedGear.name,
+            // cost: updatedGear.cost,
+            // costType: updatedGear.costType,
+            // weight: updatedGear.weight,
+            // description: updatedGear.description,
+          };
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
+    removeOneItem: {
+      description: "",
+      type: ItemType,
       args: {
         id: { type: GraphQLID },
       },
       resolve: async (parent, args, context, info) => {
         try {
-          const gear = await CustomGear.findById(args.id);
-          if (gear.creator_id != context.identifier) {
-            throw new Error("The item you have entered cannot be deleted");
-          }
-          const deletedGear = await CustomGear.findByIdAndDelete(args.id);
+          const item = await Item.findById(args.id);
+          const deletedItem = await Item.findByIdAndDelete(args.id);
 
           return {
-            ...deletedGear._doc,
-            _id: deletedGear.id,
+            ...deletedItem._doc,
+            _id: deletedItem.id,
           };
         } catch (err) {
           throw err;
         }
       },
     },
-    removeArmor: {
-      description:
-        "Delete a single Custom Armor item. Requires the item _id, returns the former id. Throws an error if the item does not match your account identifier",
-      type: ArmorType,
+    removeOneMove: {
+      description: "",
+      type: MoveType,
       args: {
         id: { type: GraphQLID },
       },
       resolve: async (parent, args, context, info) => {
         try {
-          const armor = await CustomArmor.findById(args.id);
-          if (armor.creator_id != context.identifier) {
-            throw new Error("The item you have entered cannot be deleted");
-          }
+          const move = await Move.findById(args.id);
+          const deletedMove = await Move.findByIdAndDelete(args.id);
 
-          const deletedArmor = await CustomArmor.findByIdAndDelete(args.id);
           return {
-            ...deletedArmor._doc,
-            _id: deletedArmor.id,
-            name: deletedArmor.name,
+            ...deletedMove._doc,
+            _id: deletedMove.id,
+          };
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
+    removeOnePokemon: {
+      description: "",
+      type: PokemonType,
+      args: {
+        id: { type: GraphQLID },
+      },
+      resolve: async (parent, args, context, info) => {
+        try {
+          const pokemon = await Pokemon.findById(args.id);
+          const deletedPokemon = await Pokemon.findByIdAndDelete(args.id);
+
+          return {
+            ...deletedPokemon._doc,
+            _id: deletedPokemon.id,
           };
         } catch (err) {
           throw err;
