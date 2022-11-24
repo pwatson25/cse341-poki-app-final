@@ -1,7 +1,6 @@
 const graphql = require("graphql");
 const { createImportSpecifier } = require("typescript");
 const appConfig = require("../config/app");
-const User = require("../models/user.js");
 const Item = require("../models/item.js");
 const Move = require("../models/move.js");
 const Pokemon = require("../models/pokemon.js");
@@ -110,58 +109,48 @@ const MoveType = new GraphQLObjectType({
   }),
 });
 
-const MoveListType = new GraphQLObjectType({
-  name: "MoveListType",
-  fields: () => ({
-    move: { type: DetailsType },
-  }),
-});
+// const MoveListType = new GraphQLObjectType({
+//   name: "MoveListType",
+//   fields: () => ({
+//     move: { type: DetailsType },
+//   }),
+// });
 
-const PokemonType = new GraphQLObjectType({
-  name: "Pokemon",
-  fields: () => ({
-    id: { type: GraphQLID },
-    name: { type: GraphQLString },
-    base_experience: { type: GraphQLInt },
-    height: { type: GraphQLInt },
-    is_default: { type: GraphQLBoolean },
-    order: { type: GraphQLInt },
-    weight: { type: GraphQLInt },
-    abilities: {
-      ability: { type: DetailsType },
-      is_hidden: { type: GraphQLBoolean },
-      slot: { type: GraphQLInt },
-    },
-    forms: { type: DetailsType },
-    held_items: {
-      item: { type: DetailsType },
-    },
-    location_area_encounters: { type: GraphQLString },
-    moves: { type: GraphQLList(MoveListType) },
-    past_types: {
-      slot: { type: GraphQLInt },
-      type: { type: DetailsType },
-    },
-    species: { type: DetailsType },
-    types: {
-      slot: { type: GraphQLInt },
-      type: { type: DetailsType },
-    },
-  }),
-});
-const UserType = new GraphQLObjectType({
-  name: "User",
-  fields: () => ({
-    identifier: { type: GraphQLString },
-    email: { type: GraphQLString },
-    givenName: { type: GraphQLString },
-    familyName: { type: GraphQLString },
-    locale: { type: GraphQLString },
-    picture: { type: GraphQLString },
-  }),
-});
+// const PokemonType = new GraphQLObjectType({
+//   name: "Pokemon",
+//   fields: () => ({
+//     id: { type: GraphQLID },
+//     name: { type: GraphQLString },
+//     base_experience: { type: GraphQLInt },
+//     height: { type: GraphQLInt },
+//     is_default: { type: GraphQLBoolean },
+//     order: { type: GraphQLInt },
+//     weight: { type: GraphQLInt },
+//     abilities: {
+//       ability: { type: DetailsType },
+//       is_hidden: { type: GraphQLBoolean },
+//       slot: { type: GraphQLInt },
+//     },
+//     forms: { type: DetailsType },
+//     held_items: {
+//       item: { type: DetailsType },
+//     },
+//     location_area_encounters: { type: GraphQLString },
+//     moves: { type: GraphQLList(MoveListType) },
+//     past_types: {
+//       slot: { type: GraphQLInt },
+//       type: { type: DetailsType },
+//     },
+//     species: { type: DetailsType },
+//     types: {
+//       slot: { type: GraphQLInt },
+//       type: { type: DetailsType },
+//     },
+//   }),
+// });
 
 // root query is used to perform READ operations
+
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   description: "All GET-type queries.",
@@ -182,7 +171,7 @@ const RootQuery = new GraphQLObjectType({
       },
     },
     getOneMove: {
-      description: "Find one item. Requires the move's ID",
+      description: "Find one move. Requires the move's ID",
       type: MoveType,
       args: { id: { type: GraphQLID } },
       resolve: async (root, args, context, info) => {
@@ -196,21 +185,21 @@ const RootQuery = new GraphQLObjectType({
         }
       },
     },
-    getOnePokemon: {
-      description: "Find one item. Requires the pokemon's ID",
-      type: PokemonType,
-      args: { id: { type: GraphQLID } },
-      resolve: async (root, args, context, info) => {
-        try {
-          let foundPokemon = Pokemon.findOne({
-            _id: args.id,
-          });
-          return foundPokemon;
-        } catch (err) {
-          throw err;
-        }
-      },
-    },
+    // getOnePokemon: {
+    //   description: "Find one pokemon. Requires the pokemon's ID",
+    //   type: PokemonType,
+    //   args: { id: { type: GraphQLID } },
+    //   resolve: async (root, args, context, info) => {
+    //     try {
+    //       let foundPokemon = Pokemon.findOne({
+    //         _id: args.id,
+    //       });
+    //       return foundPokemon;
+    //     } catch (err) {
+    //       throw err;
+    //     }
+    //   },
+    // },
     getAllItems: {
       description: "Returns all items.",
       type: new graphql.GraphQLList(ItemType),
@@ -225,13 +214,13 @@ const RootQuery = new GraphQLObjectType({
         return Move.find({});
       },
     },
-    getAllPokemon: {
-      description: "Returns all Pokemon",
-      type: new graphql.GraphQLList(PokemonType),
-      resolve: async (root, args, context, info) => {
-        return Pokemon.find({});
-      },
-    },
+    // getAllPokemon: {
+    //   description: "Returns all Pokemon",
+    //   type: new graphql.GraphQLList(PokemonType),
+    //   resolve: async (root, args, context, info) => {
+    //     return Pokemon.find({});
+    //   },
+    // },
   },
 });
 
@@ -297,34 +286,34 @@ const Mutation = new GraphQLObjectType({
         }
       },
     },
-    addOnePokemon: {
-      description: "",
-      type: PokemonType,
-      args: {
-        // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
-        // cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
-        // costType: { type: new graphql.GraphQLNonNull(CostTypeEnumType) },
-        // weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
-        // description: { type: new graphql.GraphQLNonNull(GraphQLString) },
-      },
-      resolve: async (root, args, context, info) => {
-        try {
-          // const pokemon = new Pokemon({
-          // populate the mongoDB item with args
-          // name: args.name,
-          // cost: args.cost,
-          // costType: args.costType,
-          // weight: args.weight,
-          // description: args.description,
-          // creator_id: context.identifier,
-          // });
-          // const newPokemon = await pokemon.save();
-          // return { ...newPokemon._doc, _id: newPokemon.id };
-        } catch (err) {
-          throw err;
-        }
-      },
-    },
+    // addOnePokemon: {
+    //   description: "",
+    //   type: PokemonType,
+    //   args: {
+    //     // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
+    //     // cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+    //     // costType: { type: new graphql.GraphQLNonNull(CostTypeEnumType) },
+    //     // weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+    //     // description: { type: new graphql.GraphQLNonNull(GraphQLString) },
+    //   },
+    //   resolve: async (root, args, context, info) => {
+    //     try {
+    //       // const pokemon = new Pokemon({
+    //       // populate the mongoDB item with args
+    //       // name: args.name,
+    //       // cost: args.cost,
+    //       // costType: args.costType,
+    //       // weight: args.weight,
+    //       // description: args.description,
+    //       // creator_id: context.identifier,
+    //       // });
+    //       // const newPokemon = await pokemon.save();
+    //       // return { ...newPokemon._doc, _id: newPokemon.id };
+    //     } catch (err) {
+    //       throw err;
+    //     }
+    //   },
+    // },
     updateOneItem: {
       description: "",
       type: ItemType,
@@ -415,51 +404,51 @@ const Mutation = new GraphQLObjectType({
         }
       },
     },
-    updateOnePokemon: {
-      description: "",
-      type: PokemonType,
-      args: {
-        // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
-        // cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
-        // costType: { type: new graphql.GraphQLNonNull(CostTypeEnumType) },
-        // weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
-        // description: { type: new graphql.GraphQLNonNull(GraphQLString) },
-      },
-      resolve: async (root, args, context, info) => {
-        try {
-          // const formerPokemon = await Pokemon.findById(args.id);
+    // updateOnePokemon: {
+    //   description: "",
+    //   type: PokemonType,
+    //   args: {
+    //     // name: { type: new graphql.GraphQLNonNull(GraphQLString) },
+    //     // cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+    //     // costType: { type: new graphql.GraphQLNonNull(CostTypeEnumType) },
+    //     // weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
+    //     // description: { type: new graphql.GraphQLNonNull(GraphQLString) },
+    //   },
+    //   resolve: async (root, args, context, info) => {
+    //     try {
+    //       // const formerPokemon = await Pokemon.findById(args.id);
 
-          // "args" stores the user input, use it to update Item's properties
+    //       // "args" stores the user input, use it to update Item's properties
 
-          // validation (graphql validates type automatically,
-          // we just need to check additional restrictions
-          // and determine which fields can/can't be updated)
+    //       // validation (graphql validates type automatically,
+    //       // we just need to check additional restrictions
+    //       // and determine which fields can/can't be updated)
 
-          // after validation, find the item and update it.
-          // const updatedPokemon = await Pokemon.findByIdAndUpdate(args.id, {
-          // properties of Item to be updated
-          // name: newName,
-          // cost: newCost,
-          // costType: newCostType,
-          // weight: newWeight,
-          // description: newDesc,
-          // });
+    //       // after validation, find the item and update it.
+    //       // const updatedPokemon = await Pokemon.findByIdAndUpdate(args.id, {
+    //       // properties of Item to be updated
+    //       // name: newName,
+    //       // cost: newCost,
+    //       // costType: newCostType,
+    //       // weight: newWeight,
+    //       // description: newDesc,
+    //       // });
 
-          return {
-            // what do we want the user to have returned? The commented out code returns various fields to the user
-            // ...updatedGear._doc,
-            // id: updatedGear.id,
-            // name: updatedGear.name,
-            // cost: updatedGear.cost,
-            // costType: updatedGear.costType,
-            // weight: updatedGear.weight,
-            // description: updatedGear.description,
-          };
-        } catch (err) {
-          throw err;
-        }
-      },
-    },
+    //       return {
+    //         // what do we want the user to have returned? The commented out code returns various fields to the user
+    //         // ...updatedGear._doc,
+    //         // id: updatedGear.id,
+    //         // name: updatedGear.name,
+    //         // cost: updatedGear.cost,
+    //         // costType: updatedGear.costType,
+    //         // weight: updatedGear.weight,
+    //         // description: updatedGear.description,
+    //       };
+    //     } catch (err) {
+    //       throw err;
+    //     }
+    //   },
+    // },
     removeOneItem: {
       description: "",
       type: ItemType,
@@ -500,26 +489,26 @@ const Mutation = new GraphQLObjectType({
         }
       },
     },
-    removeOnePokemon: {
-      description: "",
-      type: PokemonType,
-      args: {
-        id: { type: GraphQLID },
-      },
-      resolve: async (parent, args, context, info) => {
-        try {
-          const pokemon = await Pokemon.findById(args.id);
-          const deletedPokemon = await Pokemon.findByIdAndDelete(args.id);
+    // removeOnePokemon: {
+    //   description: "",
+    //   type: PokemonType,
+    //   args: {
+    //     id: { type: GraphQLID },
+    //   },
+    //   resolve: async (parent, args, context, info) => {
+    //     try {
+    //       const pokemon = await Pokemon.findById(args.id);
+    //       const deletedPokemon = await Pokemon.findByIdAndDelete(args.id);
 
-          return {
-            ...deletedPokemon._doc,
-            _id: deletedPokemon.id,
-          };
-        } catch (err) {
-          throw err;
-        }
-      },
-    },
+    //       return {
+    //         ...deletedPokemon._doc,
+    //         _id: deletedPokemon.id,
+    //       };
+    //     } catch (err) {
+    //       throw err;
+    //     }
+    //   },
+    // },
   },
 });
 
