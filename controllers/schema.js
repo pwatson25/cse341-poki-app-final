@@ -1,5 +1,8 @@
 const graphql = require("graphql");
-const { createImportSpecifier } = require("typescript");
+const {
+  createImportSpecifier,
+  isExternalModuleReference,
+} = require("typescript");
 const appConfig = require("../config/app");
 const Item = require("../models/item.js");
 const Move = require("../models/move.js");
@@ -123,7 +126,7 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       resolve: async (root, args, context, info) => {
         try {
-          let foundItem = Item.findOne({
+          let foundItem = await Item.findOne({
             _id: args.id,
           });
           return foundItem;
@@ -138,7 +141,7 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       resolve: async (root, args, context, info) => {
         try {
-          let foundMove = Move.findOne({
+          let foundMove = await Move.findOne({
             _id: args.id,
           });
           return foundMove;
@@ -153,7 +156,7 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       resolve: async (root, args, context, info) => {
         try {
-          let foundPokemon = Pokemon.findOne({
+          let foundPokemon = await Pokemon.findOne({
             _id: args.id,
           });
           return foundPokemon;
@@ -166,21 +169,36 @@ const RootQuery = new GraphQLObjectType({
       description: "Returns all items.",
       type: new graphql.GraphQLList(ItemType),
       resolve: async (root, args, context, info) => {
-        return Item.find({});
+        try {
+          const result = await Item.find();
+          return result;
+        } catch (err) {
+          throw err;
+        }
       },
     },
     getAllMoves: {
       description: "Returns all moves.",
       type: new graphql.GraphQLList(MoveType),
       resolve: async (root, args, context, info) => {
-        return Move.find({});
+        try {
+          const result = await Move.find();
+          return result;
+        } catch (err) {
+          throw err;
+        }
       },
     },
     getAllPokemon: {
       description: "Returns all Pokemon",
       type: new graphql.GraphQLList(PokemonType),
       resolve: async (root, args, context, info) => {
-        return Pokemon.find({});
+        try {
+          const result = await Pokemon.find();
+          return result;
+        } catch (err) {
+          throw err;
+        }
       },
     },
   },
