@@ -18,6 +18,7 @@ const {
   GraphQLList,
 } = graphql;
 
+// These must be used when making new base types
 const {
   DetailsType,
   EffectEntriesType,
@@ -31,6 +32,19 @@ const {
   ItemListType,
   PokemonSpeciesType,
 } = outputTypes;
+
+// These must be used when making a new Mutation method.
+const {
+  DetailsInputType,
+  EffectEntriesInputType,
+  ContestCombosInputType,
+  ConetstEffectInputType,
+  MoveMetaInputType,
+  MoveListInputType,
+  PokemonAbilitiesInputType,
+  ItemListInputType,
+  PokemonSpeciesInputType,
+} = inputTypes;
 
 // Types representing the collections
 const ItemType = new GraphQLObjectType({
@@ -185,22 +199,22 @@ const Mutation = new GraphQLObjectType({
         cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
         fling_power: { type: new graphql.GraphQLNonNull(GraphQLInt) },
         fling_effect: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
         attributes: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
         effect_entries: {
-          type: new graphql.GraphQLNonNull(inputTypes.EffectEntriesInputType),
+          type: new graphql.GraphQLNonNull(EffectEntriesInputType),
         },
         held_by_pokemon: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
         baby_trigger_for: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
         machines: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
       },
       resolve: async (root, args, context, info) => {
@@ -237,48 +251,48 @@ const Mutation = new GraphQLObjectType({
         priority: { type: new graphql.GraphQLNonNull(GraphQLInt) },
         power: { type: new graphql.GraphQLNonNull(GraphQLInt) },
         contest_combos: {
-          type: new graphql.GraphQLNonNull(inputTypes.ContestCombosInputType),
+          type: new graphql.GraphQLNonNull(ContestCombosInputType),
         },
         contest_type: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
         contest_effect: {
-          type: new graphql.GraphQLNonNull(inputTypes.ConetstEffectInputType),
+          type: new graphql.GraphQLNonNull(ConetstEffectInputType),
         },
         damage_class: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
         effect_entries: {
-          type: new graphql.GraphQLNonNull(inputTypes.EffectEntriesInputType),
+          type: new graphql.GraphQLNonNull(EffectEntriesInputType),
         },
         effect_changes: {
-          type: new graphql.GraphQLNonNull(inputTypes.EffectEntriesInputType),
+          type: new graphql.GraphQLNonNull(EffectEntriesInputType),
         },
         learned_by_pokemon: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
         generation: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
         machines: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
         meta: {
-          type: new graphql.GraphQLNonNull(inputTypes.MoveMetaInputType),
+          type: new graphql.GraphQLNonNull(MoveMetaInputType),
         },
         past_values: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
         stat_changes: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
         super_contest_effect: {
-          type: new graphql.GraphQLNonNull(inputTypes.ConetstEffectInputType),
+          type: new graphql.GraphQLNonNull(ConetstEffectInputType),
         },
         target: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
-        type: { type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType) },
+        type: { type: new graphql.GraphQLNonNull(DetailsInputType) },
       },
       resolve: async (root, args, context, info) => {
         try {
@@ -324,34 +338,28 @@ const Mutation = new GraphQLObjectType({
         order: { type: new graphql.GraphQLNonNull(GraphQLInt) },
         weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
         abilities: {
-          type: new graphql.GraphQLNonNull(
-            inputTypes.PokemonAbilitiesInputType
-          ),
+          type: new graphql.GraphQLNonNull(PokemonAbilitiesInputType),
         },
         forms: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
         held_items: {
-          type: new graphql.GraphQLNonNull(
-            GraphQLList(inputTypes.ItemListInputType)
-          ),
+          type: new graphql.GraphQLNonNull(GraphQLList(ItemListInputType)),
         },
         location_area_encounters: {
           type: new graphql.GraphQLNonNull(GraphQLString),
         },
         moves: {
-          type: new graphql.GraphQLNonNull(
-            GraphQLList(inputTypes.MoveListInputType)
-          ),
+          type: new graphql.GraphQLNonNull(GraphQLList(MoveListInputType)),
         },
         past_types: {
-          type: new graphql.GraphQLNonNull(inputTypes.PokemonSpeciesInputType),
+          type: new graphql.GraphQLNonNull(PokemonSpeciesInputType),
         },
         species: {
-          type: new graphql.GraphQLNonNull(inputTypes.DetailsInputType),
+          type: new graphql.GraphQLNonNull(DetailsInputType),
         },
         types: {
-          type: new graphql.GraphQLNonNull(inputTypes.PokemonSpeciesInputType),
+          type: new graphql.GraphQLNonNull(PokemonSpeciesInputType),
         },
       },
       resolve: async (root, args, context, info) => {
@@ -388,12 +396,12 @@ const Mutation = new GraphQLObjectType({
         name: { type: GraphQLString },
         cost: { type: GraphQLInt },
         fling_power: { type: GraphQLInt },
-        fling_effect: { type: inputTypes.DetailsInputType },
-        attributes: { type: inputTypes.DetailsInputType },
-        effect_entries: { type: inputTypes.EffectEntriesInputType },
-        held_by_pokemon: { type: inputTypes.DetailsInputType },
-        baby_trigger_for: { type: inputTypes.DetailsInputType },
-        machines: { type: inputTypes.DetailsInputType },
+        fling_effect: { type: DetailsInputType },
+        attributes: { type: DetailsInputType },
+        effect_entries: { type: EffectEntriesInputType },
+        held_by_pokemon: { type: DetailsInputType },
+        baby_trigger_for: { type: DetailsInputType },
+        machines: { type: DetailsInputType },
       },
       resolve: async (root, args, context, info) => {
         try {
@@ -437,21 +445,21 @@ const Mutation = new GraphQLObjectType({
         pp: { type: GraphQLInt },
         priority: { type: GraphQLInt },
         power: { type: GraphQLInt },
-        contest_combos: { type: inputTypes.ContestCombosInputType },
-        contest_type: { type: inputTypes.DetailsInputType },
-        contest_effect: { type: inputTypes.ConetstEffectInputType },
-        damage_class: { type: inputTypes.DetailsInputType },
-        effect_entries: { type: inputTypes.EffectEntriesInputType },
-        effect_changes: { type: inputTypes.EffectEntriesInputType },
-        learned_by_pokemon: { type: inputTypes.DetailsInputType },
-        generation: { type: inputTypes.DetailsInputType },
-        machines: { type: inputTypes.DetailsInputType },
-        meta: { type: inputTypes.MoveMetaInputType },
-        past_values: { type: inputTypes.DetailsInputType },
-        stat_changes: { type: inputTypes.DetailsInputType },
-        super_contest_effect: { type: inputTypes.ConetstEffectInputType },
-        target: { type: inputTypes.DetailsInputType },
-        type: { type: inputTypes.DetailsInputType },
+        contest_combos: { type: ContestCombosInputType },
+        contest_type: { type: DetailsInputType },
+        contest_effect: { type: ConetstEffectInputType },
+        damage_class: { type: DetailsInputType },
+        effect_entries: { type: EffectEntriesInputType },
+        effect_changes: { type: EffectEntriesInputType },
+        learned_by_pokemon: { type: DetailsInputType },
+        generation: { type: DetailsInputType },
+        machines: { type: DetailsInputType },
+        meta: { type: MoveMetaInputType },
+        past_values: { type: DetailsInputType },
+        stat_changes: { type: DetailsInputType },
+        super_contest_effect: { type: ConetstEffectInputType },
+        target: { type: DetailsInputType },
+        type: { type: DetailsInputType },
       },
       resolve: async (root, args, context, info) => {
         try {
@@ -495,14 +503,14 @@ const Mutation = new GraphQLObjectType({
         is_default: { type: GraphQLBoolean },
         order: { type: GraphQLInt },
         weight: { type: GraphQLInt },
-        abilities: { type: inputTypes.PokemonAbilitiesInputType },
-        forms: { type: inputTypes.DetailsInputType },
-        held_items: { type: GraphQLList(inputTypes.ItemListInputType) },
+        abilities: { type: PokemonAbilitiesInputType },
+        forms: { type: DetailsInputType },
+        held_items: { type: GraphQLList(ItemListInputType) },
         location_area_encounters: { type: GraphQLString },
-        moves: { type: GraphQLList(inputTypes.MoveListInputType) },
-        past_types: { type: inputTypes.PokemonSpeciesInputType },
-        species: { type: inputTypes.DetailsInputType },
-        types: { type: inputTypes.PokemonSpeciesInputType },
+        moves: { type: GraphQLList(MoveListInputType) },
+        past_types: { type: PokemonSpeciesInputType },
+        species: { type: DetailsInputType },
+        types: { type: PokemonSpeciesInputType },
       },
       resolve: async (root, args, context, info) => {
         try {
