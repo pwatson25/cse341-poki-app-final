@@ -427,29 +427,66 @@ const Mutation = new GraphQLObjectType({
       },
       resolve: async (root, args, context, info) => {
         try {
-          // const formerItem = await Item.findById(args.id);
+          const formerItem = await Item.findById(args.id);
           // "args" stores the user input, use it to update Item's properties
-          // validation (graphql validates type automatically,
-          // we just need to check additional restrictions
-          // and determine which fields can/can't be updated)
+
+          // VALIDATION
+          // (graphql validates type automatically, we just need to check additional restrictions and determine which fields can/can't be updated)
+          // Currently, this just checks if the user added anything to any field.
+
+          let newName;
+          if (!args.name) {
+            newName = formerItem.name;
+          }
+          let newCost;
+          if (!args.cost) {
+            newCost = formerItem.cost;
+          }
+          let newFling_power;
+          if (!args.name) {
+            newFling_power = formerItem.fling_power;
+          }
+          let newFling_effect;
+          if (!args.name) {
+            newFling_effect = formerItem.fling_effect;
+          }
+          let newAttributes;
+          if (!args.name) {
+            newAttributes = formerItem.attributes;
+          }
+          let newEffect_entries;
+          if (!args.name) {
+            newEffect_entries = formerItem.effect_entries;
+          }
+          let newHeld_by_pokemon;
+          if (!args.name) {
+            newHeld_by_pokemon = formerItem.held_by_pokemon;
+          }
+          let newBaby_trigger_for;
+          if (!args.name) {
+            newBaby_trigger_for = formerItem.baby_trigger_for;
+          }
+          let newMachines;
+          if (!args.name) {
+            newMachines = formerItem.machines;
+          }
+
           // after validation, find the item and update it.
-          // const updatedItem = await Item.findByIdAndUpdate(args.id, {
-          // properties of Item to be updated
-          // name: newName,
-          // cost: newCost,
-          // costType: newCostType,
-          // weight: newWeight,
-          // description: newDesc,
-          // });
+          const updatedItem = await Item.findByIdAndUpdate(args.id, {
+            // properties of Item to be updated
+            name: newName,
+            cost: newCost,
+            fling_power: newFling_power,
+            fling_effect: newFling_effect,
+            attributes: newAttributes,
+            effect_entries: newEffect_entries,
+            held_by_pokemon: newHeld_by_pokemon,
+            baby_trigger_for: newBaby_trigger_for,
+            machines: newMachines,
+          });
           return {
             // what do we want the user to have returned? The commented out code returns various fields to the user
-            // ...updatedGear._doc,
-            // id: updatedGear.id,
-            // name: updatedGear.name,
-            // cost: updatedGear.cost,
-            // costType: updatedGear.costType,
-            // weight: updatedGear.weight,
-            // description: updatedGear.description,
+            ...updatedItem._doc,
           };
         } catch (err) {
           throw err;
@@ -486,23 +523,124 @@ const Mutation = new GraphQLObjectType({
       },
       resolve: async (root, args, context, info) => {
         try {
-          // const formerMove = await Move.findById(args.id);
+          const formerMove = await Move.findById(args.id);
           // "args" stores the user input, use it to update Item's properties
-          // validation (graphql validates type automatically,
-          // we just need to check additional restrictions
-          // and determine which fields can/can't be updated)
+
+          // VALIDATION
+          // (graphql validates type automatically, we just need to check additional restrictions and determine which fields can/can't be updated)
+          let newName;
+          if (!args.name) {
+            newName = formerMove.name;
+          }
+          let newAccuracy;
+          if (!args.accuracy) {
+            newAccuracy = formerMove.accuracy;
+          }
+          let newEffect_chance;
+          if (!args.effect_chance) {
+            newEffect_chance = formerMove.effect_chance;
+          }
+          let newPp;
+          if (!args.pp) {
+            newPp = formerMove.pp;
+          }
+          let newPriority;
+          if (!args.priority) {
+            newPriority = formerMove.priority;
+          }
+          let newPower;
+          if (!args.power) {
+            newPower = formerMove.power;
+          }
+          let newContest_combos;
+          if (!args.contest_combos) {
+            newContest_combos = formerMove.contest_combos;
+          }
+          let newContest_type;
+          if (!args.contest_type) {
+            newContest_type = formerMove.contest_type;
+          }
+          let newContest_effect;
+          if (!args.contest_effect) {
+            newContest_effect = formerMove.contest_effect;
+          }
+          let newDamage_class;
+          if (!args.damage_class) {
+            newDamage_class = formerMove.damage_class;
+          }
+          let newEffect_entries;
+          if (!args.effect_entries) {
+            newEffect_entries = formerMove.effect_entries;
+          }
+          let newEffect_changes;
+          if (!args.effect_changes) {
+            newEffect_changes = formerMove.effect_changes;
+          }
+          let newLearned_by_pokemon;
+          if (!args.learned_by_pokemon) {
+            newLearned_by_pokemon = formerMove.learned_by_pokemon;
+          }
+          let newGeneration;
+          if (!args.generation) {
+            newGeneration = formerMove.generation;
+          }
+          let newMachines;
+          if (!args.machines) {
+            newMachines = formerMove.machines;
+          }
+          let newMeta;
+          if (!args.meta) {
+            newMeta = formerMove.meta;
+          }
+          let newPast_values;
+          if (!args.past_values) {
+            newPast_values = formerMove.past_values;
+          }
+          let newStat_changes;
+          if (!args.stat_changes) {
+            newStat_changes = formerMove.stat_changes;
+          }
+          let newSuper_contest_effect;
+          if (!args.super_contest_effect) {
+            newSuper_contest_effect = formerMove.super_contest_effect;
+          }
+          let newTarget;
+          if (!args.target) {
+            newTarget = formerMove.target;
+          }
+          let newType;
+          if (!args.type) {
+            newType = formerMove.type;
+          }
+
           // after validation, find the item and update it.
-          // const updatedMove = await Move.findByIdAndUpdate(args.id, {
-          // properties of Item to be updated
-          // name: newName,
-          // cost: newCost,
-          // costType: newCostType,
-          // weight: newWeight,
-          // description: newDesc,
-          // });
+          const updatedMove = await Move.findByIdAndUpdate(args.id, {
+            // properties of Item to be updated
+            name: newName,
+            accuracy: newAccuracy,
+            effect_chance: newEffect_chance,
+            pp: newPp,
+            priority: newPriority,
+            power: newPower,
+            contest_combos: newContest_combos,
+            contest_type: newContest_type,
+            contest_effect: newContest_effect,
+            damage_class: newDamage_class,
+            effect_entries: newEffect_entries,
+            effect_changes: newEffect_changes,
+            learned_by_pokemon: newLearned_by_pokemon,
+            generation: newGeneration,
+            machines: newMachines,
+            meta: newMeta,
+            past_values: newPast_values,
+            stat_changes: newStat_changes,
+            super_contest_effect: newSuper_contest_effect,
+            target: newTarget,
+            type: newType,
+          });
           return {
             // what do we want the user to have returned? The commented out code returns various fields to the user
-            // ...updatedGear._doc,
+            ...updatedMove._doc,
             // id: updatedGear.id,
             // name: updatedGear.name,
             // cost: updatedGear.cost,
@@ -538,23 +676,89 @@ const Mutation = new GraphQLObjectType({
       },
       resolve: async (root, args, context, info) => {
         try {
-          // const formerPokemon = await Pokemon.findById(args.id);
+          const formerPokemon = await Pokemon.findById(args.id);
           // "args" stores the user input, use it to update Item's properties
-          // validation (graphql validates type automatically,
-          // we just need to check additional restrictions
-          // and determine which fields can/can't be updated)
+
+          // VALIDATION
+          // (graphql validates type automatically, we just need to check additional restrictions and determine which fields can/can't be updated)
+          let newName;
+          if (!args.name) {
+            newName = formerPokemon.name;
+          }
+          let newBase_experience;
+          if (!args.base_experience) {
+            newBase_experience = formerPokemon.base_experience;
+          }
+          let newHeight;
+          if (!args.height) {
+            newHeight = formerPokemon.height;
+          }
+          let newIs_default;
+          if (!args.is_default) {
+            newIs_default = formerPokemon.is_default;
+          }
+          let newOrder;
+          if (!args.order) {
+            newOrder = formerPokemon.order;
+          }
+          let newWeight;
+          if (!args.weight) {
+            newWeight = formerPokemon.weight;
+          }
+          let newAbilities;
+          if (!args.abilities) {
+            newAbilities = formerPokemon.abilities;
+          }
+          let newForms;
+          if (!args.forms) {
+            newForms = formerPokemon.forms;
+          }
+          let newHeld_items;
+          if (!args.held_items) {
+            newHeld_items = formerPokemon.held_items;
+          }
+          let newLocation_area_encounters;
+          if (!args.location_area_encounters) {
+            newLocation_area_encounters =
+              formerPokemon.location_area_encounters;
+          }
+          let newMoves;
+          if (!args.moves) {
+            newMoves = formerPokemon.moves;
+          }
+          let newPast_types;
+          if (!args.past_types) {
+            newPast_types = formerPokemon.past_types;
+          }
+          let newSpecies;
+          if (!args.species) {
+            newSpecies = formerPokemon.species;
+          }
+          let newTypes;
+          if (!args.types) {
+            newTypes = formerPokemon.types;
+          }
           // after validation, find the item and update it.
-          // const updatedPokemon = await Pokemon.findByIdAndUpdate(args.id, {
-          // properties of Item to be updated
-          // name: newName,
-          // cost: newCost,
-          // costType: newCostType,
-          // weight: newWeight,
-          // description: newDesc,
-          // });
+          const updatedPokemon = await Pokemon.findByIdAndUpdate(args.id, {
+            // properties of Item to be updated
+            name: newName,
+            base_experience: newBase_experience,
+            height: newHeight,
+            is_default: newIs_default,
+            order: newOrder,
+            weight: newWeight,
+            abilities: newAbilities,
+            forms: newForms,
+            held_items: newHeld_items,
+            location_area_encounters: newLocation_area_encounters,
+            moves: newMoves,
+            past_types: newPast_types,
+            species: newSpecies,
+            types: newTypes,
+          });
           return {
             // what do we want the user to have returned? The commented out code returns various fields to the user
-            // ...updatedGear._doc,
+            ...updatedPokemon._doc,
             // id: updatedGear.id,
             // name: updatedGear.name,
             // cost: updatedGear.cost,
