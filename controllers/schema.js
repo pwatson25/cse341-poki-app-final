@@ -104,14 +104,14 @@ const PokemonType = new GraphQLObjectType({
     is_default: { type: GraphQLBoolean },
     order: { type: GraphQLInt },
     weight: { type: GraphQLInt },
-    abilities: { type: PokemonAbilitiesType },
+    abilities: { type: GraphQLList(PokemonAbilitiesType) },
     forms: { type: DetailsType },
-    held_items: { type: ItemListType },
+    held_items: { type: GraphQLList(ItemListType) },
     location_area_encounters: { type: GraphQLString },
     moves: { type: GraphQLList(MoveListType) },
-    past_types: { type: PokemonSpeciesType },
+    past_types: { type: GraphQLList(PokemonSpeciesType) },
     species: { type: DetailsType },
-    types: { type: PokemonSpeciesType },
+    types: { type: GraphQLList(PokemonSpeciesType) },
   }),
 });
 
@@ -359,7 +359,9 @@ const Mutation = new GraphQLObjectType({
         order: { type: new graphql.GraphQLNonNull(GraphQLInt) },
         weight: { type: new graphql.GraphQLNonNull(GraphQLInt) },
         abilities: {
-          type: new graphql.GraphQLNonNull(PokemonAbilitiesInputType),
+          type: new graphql.GraphQLNonNull(
+            GraphQLList(PokemonAbilitiesInputType)
+          ),
         },
         forms: {
           type: new graphql.GraphQLNonNull(DetailsInputType),
@@ -678,6 +680,11 @@ const Mutation = new GraphQLObjectType({
         try {
           const formerPokemon = await Pokemon.findById(args.id);
           // "args" stores the user input, use it to update Item's properties
+
+          // for (const property in formerPokemon._doc) {
+          //   console.log(`${property}: ${formerPokemon._doc[property]}`);
+          // }
+          // console.log(formerPokemon._doc);
 
           // VALIDATION
           // (graphql validates type automatically, we just need to check additional restrictions and determine which fields can/can't be updated)
