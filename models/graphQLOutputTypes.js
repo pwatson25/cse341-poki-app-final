@@ -105,7 +105,7 @@ const PokemonSpeciesType = new GraphQLObjectType({
   name: "Pokemon_species",
   fields: () => ({
     slot: { type: GraphQLInt },
-    type: { type: DetailsType },
+    species_type: { type: DetailsType },
   }),
 });
 

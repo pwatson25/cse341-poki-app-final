@@ -106,7 +106,7 @@ const PokemonSpeciesInputType = new graphql.GraphQLInputObjectType({
   name: "PokemonSpeciesInput",
   fields: () => ({
     slot: { type: GraphQLInt },
-    type: { type: DetailsInputType },
+    species_type: { type: DetailsInputType },
   }),
 });
 
