@@ -425,7 +425,7 @@ const Mutation = new GraphQLObjectType({
         effect_entries: { type: GraphQLList(EffectEntriesInputType) },
         held_by_pokemon: { type: GraphQLList(DetailsInputType) },
         baby_trigger_for: { type: GraphQLList(DetailsInputType) },
-        machines: { type: DGraphQLList(DetailsInputType) },
+        machines: { type: GraphQLList(DetailsInputType) },
       },
       resolve: async (root, args, context, info) => {
         try {
