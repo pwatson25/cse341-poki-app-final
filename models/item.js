@@ -10,10 +10,12 @@ const itemSchema = new Schema({
     name: String,
     url: String,
   },
-  attributes: {
-    name: String,
-    url: String,
-  },
+  attributes: [
+    {
+      name: String,
+      url: String,
+    },
+  ],
   effect_entries: {
     effect: String,
     language: {

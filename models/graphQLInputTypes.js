@@ -1,6 +1,6 @@
-const graphql = require("graphql");
-const { createImportSpecifier } = require("typescript");
-const appConfig = require("../config/app");
+const graphql = require('graphql');
+const { createImportSpecifier } = require('typescript');
+const appConfig = require('../config/app');
 
 const {
   GraphQLObjectType,
@@ -13,7 +13,7 @@ const {
 } = graphql;
 
 const DetailsInputType = new graphql.GraphQLInputObjectType({
-  name: "DetailsInput",
+  name: 'DetailsInput',
   fields: () => ({
     name: { type: GraphQLString },
     url: { type: GraphQLString },
@@ -21,7 +21,7 @@ const DetailsInputType = new graphql.GraphQLInputObjectType({
 });
 
 const EffectEntriesInputType = new graphql.GraphQLInputObjectType({
-  name: "EffectEntriesInputType",
+  name: 'EffectEntriesInputType',
   fields: () => ({
     effect: { type: GraphQLString },
     language: { type: DetailsInputType },
@@ -30,7 +30,7 @@ const EffectEntriesInputType = new graphql.GraphQLInputObjectType({
 });
 
 const ContestCombosInputType = new graphql.GraphQLInputObjectType({
-  name: "ContestCombosInputType",
+  name: 'ContestCombosInputType',
   fields: () => ({
     normal: { type: ContestCombosInputTypeDetail },
     super: { type: ContestCombosInputTypeDetail },
@@ -38,7 +38,7 @@ const ContestCombosInputType = new graphql.GraphQLInputObjectType({
 });
 
 const ContestCombosInputTypeDetail = new graphql.GraphQLInputObjectType({
-  name: "ContestCombosInputTypeDetail",
+  name: 'ContestCombosInputTypeDetail',
   fields: () => ({
     user_after: { type: UserAfterBeforeInputType },
     user_after: { type: UserAfterBeforeInputType },
@@ -46,7 +46,7 @@ const ContestCombosInputTypeDetail = new graphql.GraphQLInputObjectType({
 });
 
 const UserAfterBeforeInputType = new graphql.GraphQLInputObjectType({
-  name: "UserAfterBeforeInputType",
+  name: 'UserAfterBeforeInputType',
   fields: () => ({
     user_before: { type: DetailsInputType },
     user_before: { type: DetailsInputType },
@@ -54,14 +54,14 @@ const UserAfterBeforeInputType = new graphql.GraphQLInputObjectType({
 });
 
 const ConetstEffectInputType = new graphql.GraphQLInputObjectType({
-  name: "ConetstEffectInputType",
+  name: 'ConetstEffectInputType',
   fields: () => ({
     url: { type: GraphQLString },
   }),
 });
 
 const MoveMetaInputType = new graphql.GraphQLInputObjectType({
-  name: "MoveMetaInputType",
+  name: 'MoveMetaInputType',
   fields: () => ({
     ailment: { type: DetailsInputType },
     ailment_chance: { type: GraphQLInt },
@@ -80,14 +80,14 @@ const MoveMetaInputType = new graphql.GraphQLInputObjectType({
 
 // PokemonType helper types
 const MoveListInputType = new graphql.GraphQLInputObjectType({
-  name: "MoveListInputType",
+  name: 'MoveListInputType',
   fields: () => ({
     move: { type: DetailsInputType },
   }),
 });
 
 const PokemonAbilitiesInputType = new graphql.GraphQLInputObjectType({
-  name: "PokemonAbilitiesListItemInput",
+  name: 'PokemonAbilitiesListItemInput',
   fields: () => ({
     ability: { type: DetailsInputType },
     is_hidden: { type: GraphQLBoolean },
@@ -96,14 +96,14 @@ const PokemonAbilitiesInputType = new graphql.GraphQLInputObjectType({
 });
 
 const ItemListInputType = new graphql.GraphQLInputObjectType({
-  name: "PokemonHeldItemInput",
+  name: 'PokemonHeldItemInput',
   fields: () => ({
     item: { type: DetailsInputType },
   }),
 });
 
 const PokemonSpeciesInputType = new graphql.GraphQLInputObjectType({
-  name: "PokemonSpeciesInput",
+  name: 'PokemonSpeciesInput',
   fields: () => ({
     slot: { type: GraphQLInt },
     species_type: { type: DetailsInputType },
