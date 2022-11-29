@@ -82,15 +82,15 @@ const MoveType = new GraphQLObjectType({
     damage_class: { type: DetailsType },
     effect_entries: { type: GraphQLList(EffectEntriesType) },
     effect_changes: { type: GraphQLList(EffectEntriesType) },
-    learned_by_pokemon: { type: DetailsType },
-    generation: { type: DetailsType },
-    machines: { type: DetailsType },
+    learned_by_pokemon: { type: GraphQLList(DetailsType) },
+    generation: { type: GraphQLList(DetailsType) },
+    machines: { type: GraphQLList(DetailsType) },
     meta: { type: MoveMetaType },
-    past_values: { type: DetailsType },
-    stat_changes: { type: DetailsType },
-    super_contest_effect: { type: ConetstEffectType },
-    target: { type: DetailsType },
-    type: { type: DetailsType },
+    past_values: { type: GraphQLList(DetailsType) },
+    stat_changes: { type: GraphQLList(DetailsType) },
+    super_contest_effect: { type: GraphQLList(ConetstEffectType) },
+    target: { type: GraphQLList(DetailsType) },
+    type: { type: GraphQLList(DetailsType) },
   }),
 });
 
@@ -289,30 +289,32 @@ const Mutation = new GraphQLObjectType({
           type: new graphql.GraphQLNonNull(GraphQLList(EffectEntriesInputType)),
         },
         learned_by_pokemon: {
-          type: new graphql.GraphQLNonNull(DetailsInputType),
+          type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
         generation: {
-          type: new graphql.GraphQLNonNull(DetailsInputType),
+          type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
         machines: {
-          type: new graphql.GraphQLNonNull(DetailsInputType),
+          type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
         meta: {
           type: new graphql.GraphQLNonNull(MoveMetaInputType),
         },
         past_values: {
-          type: new graphql.GraphQLNonNull(DetailsInputType),
+          type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
         stat_changes: {
-          type: new graphql.GraphQLNonNull(DetailsInputType),
+          type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
         super_contest_effect: {
-          type: new graphql.GraphQLNonNull(ConetstEffectInputType),
+          type: new graphql.GraphQLNonNull(GraphQLList(ConetstEffectInputType)),
         },
         target: {
-          type: new graphql.GraphQLNonNull(DetailsInputType),
+          type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
-        type: { type: new graphql.GraphQLNonNull(DetailsInputType) },
+        type: {
+          type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
+        },
       },
       resolve: async (root, args, context, info) => {
         try {
@@ -513,15 +515,15 @@ const Mutation = new GraphQLObjectType({
         damage_class: { type: DetailsInputType },
         effect_entries: { type: GraphQLList(EffectEntriesInputType) },
         effect_changes: { type: GraphQLList(EffectEntriesInputType) },
-        learned_by_pokemon: { type: DetailsInputType },
-        generation: { type: DetailsInputType },
-        machines: { type: DetailsInputType },
+        learned_by_pokemon: { type: GraphQLList(DetailsInputType) },
+        generation: { type: GraphQLList(DetailsInputType) },
+        machines: { type: GraphQLList(DetailsInputType) },
         meta: { type: MoveMetaInputType },
-        past_values: { type: DetailsInputType },
-        stat_changes: { type: DetailsInputType },
-        super_contest_effect: { type: ConetstEffectInputType },
-        target: { type: DetailsInputType },
-        type: { type: DetailsInputType },
+        past_values: { type: GraphQLList(DetailsInputType) },
+        stat_changes: { type: GraphQLList(DetailsInputType) },
+        super_contest_effect: { type: GraphQLList(ConetstEffectInputType) },
+        target: { type: GraphQLList(DetailsInputType) },
+        type: { type: GraphQLList(DetailsInputType) },
       },
       resolve: async (root, args, context, info) => {
         try {

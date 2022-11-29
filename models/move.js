@@ -70,18 +70,24 @@ const moveSchema = new Schema({
       short_effect: String,
     },
   ],
-  learned_by_pokemon: {
-    name: String,
-    url: String,
-  },
-  generation: {
-    name: String,
-    url: String,
-  },
-  machines: {
-    name: String,
-    url: String,
-  },
+  learned_by_pokemon: [
+    {
+      name: String,
+      url: String,
+    },
+  ],
+  generation: [
+    {
+      name: String,
+      url: String,
+    },
+  ],
+  machines: [
+    {
+      name: String,
+      url: String,
+    },
+  ],
   meta: {
     ailment: {
       name: String,
@@ -102,25 +108,35 @@ const moveSchema = new Schema({
     min_turns: Number,
     stat_chance: Number,
   },
-  past_values: {
-    name: String,
-    url: String,
-  },
-  stat_changes: {
-    name: String,
-    url: String,
-  },
-  super_contest_effect: {
-    url: String,
-  },
-  target: {
-    name: String,
-    url: String,
-  },
-  type: {
-    name: String,
-    url: String,
-  },
+  past_values: [
+    {
+      name: String,
+      url: String,
+    },
+  ],
+  stat_changes: [
+    {
+      name: String,
+      url: String,
+    },
+  ],
+  super_contest_effect: [
+    {
+      url: String,
+    },
+  ],
+  target: [
+    {
+      name: String,
+      url: String,
+    },
+  ],
+  type: [
+    {
+      name: String,
+      url: String,
+    },
+  ],
 });
 
 module.exports = mongoose.model('move', moveSchema);
