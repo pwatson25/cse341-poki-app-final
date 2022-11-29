@@ -57,12 +57,12 @@ const ItemType = new GraphQLObjectType({
     name: { type: GraphQLString },
     cost: { type: GraphQLInt },
     fling_power: { type: GraphQLInt },
-    fling_effect: { type: DetailsType },
+    fling_effect: { type: GraphQLList(DetailsType) },
     attributes: { type: GraphQLList(DetailsType) },
-    effect_entries: { type: EffectEntriesType },
-    held_by_pokemon: { type: DetailsType },
-    baby_trigger_for: { type: DetailsType },
-    machines: { type: DetailsType },
+    effect_entries: { type: GraphQLList(EffectEntriesType) },
+    held_by_pokemon: { type: GraphQLList(DetailsType) },
+    baby_trigger_for: { type: GraphQLList(DetailsType) },
+    machines: { type: GraphQLList(DetailsType) },
   }),
 });
 
@@ -218,22 +218,22 @@ const Mutation = new GraphQLObjectType({
         cost: { type: new graphql.GraphQLNonNull(GraphQLInt) },
         fling_power: { type: new graphql.GraphQLNonNull(GraphQLInt) },
         fling_effect: {
-          type: new graphql.GraphQLNonNull(DetailsInputType),
+          type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
         attributes: {
           type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
         effect_entries: {
-          type: new graphql.GraphQLNonNull(EffectEntriesInputType),
+          type: new graphql.GraphQLNonNull(GraphQLList(EffectEntriesInputType)),
         },
         held_by_pokemon: {
-          type: new graphql.GraphQLNonNull(DetailsInputType),
+          type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
         baby_trigger_for: {
-          type: new graphql.GraphQLNonNull(DetailsInputType),
+          type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
         machines: {
-          type: new graphql.GraphQLNonNull(DetailsInputType),
+          type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
       },
       resolve: async (root, args, context, info) => {
@@ -420,12 +420,12 @@ const Mutation = new GraphQLObjectType({
         name: { type: GraphQLString },
         cost: { type: GraphQLInt },
         fling_power: { type: GraphQLInt },
-        fling_effect: { type: DetailsInputType },
+        fling_effect: { type: GraphQLList(DetailsInputType) },
         attributes: { type: GraphQLList(DetailsInputType) },
-        effect_entries: { type: EffectEntriesInputType },
-        held_by_pokemon: { type: DetailsInputType },
-        baby_trigger_for: { type: DetailsInputType },
-        machines: { type: DetailsInputType },
+        effect_entries: { type: GraphQLList(EffectEntriesInputType) },
+        held_by_pokemon: { type: GraphQLList(DetailsInputType) },
+        baby_trigger_for: { type: GraphQLList(DetailsInputType) },
+        machines: { type: DGraphQLList(DetailsInputType) },
       },
       resolve: async (root, args, context, info) => {
         try {
