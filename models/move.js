@@ -46,22 +46,30 @@ const moveSchema = new Schema({
     name: String,
     url: String,
   },
-  effect_entries: {
-    effect: String,
-    language: {
-      name: String,
-      url: String,
+  effect_entries: [
+    {
+      effect: String,
+      language: [
+        {
+          name: String,
+          url: String,
+        },
+      ],
+      short_effect: String,
     },
-    short_effect: String,
-  },
-  effect_changes: {
-    effect: String,
-    language: {
-      name: String,
-      url: String,
+  ],
+  effect_changes: [
+    {
+      effect: String,
+      language: [
+        {
+          name: String,
+          url: String,
+        },
+      ],
+      short_effect: String,
     },
-    short_effect: String,
-  },
+  ],
   learned_by_pokemon: {
     name: String,
     url: String,
