@@ -41,14 +41,12 @@ const ContestCombosInputTypeDetail = new graphql.GraphQLInputObjectType({
   name: 'ContestCombosInputTypeDetail',
   fields: () => ({
     user_after: { type: UserAfterBeforeInputType },
-    user_after: { type: UserAfterBeforeInputType },
   }),
 });
 
 const UserAfterBeforeInputType = new graphql.GraphQLInputObjectType({
   name: 'UserAfterBeforeInputType',
   fields: () => ({
-    user_before: { type: DetailsInputType },
     user_before: { type: DetailsInputType },
   }),
 });

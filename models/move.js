@@ -9,43 +9,51 @@ const moveSchema = new Schema({
   pp: Number,
   priority: Number,
   power: Number,
-  contest_combos: {
-    normal: {
-      user_after: {
-        user_before: {
-          name: String,
-          url: String,
+  contest_combos: [
+    {
+      normal: [
+        {
+          user_after: [
+            {
+              user_before: {
+                name: String,
+                url: String,
+              },
+            },
+          ],
         },
-        user_before: {
-          name: String,
-          url: String,
+      ],
+      super: [
+        {
+          user_after: {
+            user_before: [
+              {
+                name: String,
+                url: String,
+              },
+            ],
+          },
         },
-      },
+      ],
     },
-    super: {
-      user_after: {
-        user_before: {
-          name: String,
-          url: String,
-        },
-        user_before: {
-          name: String,
-          url: String,
-        },
-      },
+  ],
+  contest_type: [
+    {
+      name: String,
+      url: String,
     },
-  },
-  contest_type: {
-    name: String,
-    url: String,
-  },
-  contest_effect: {
-    url: String,
-  },
-  damage_class: {
-    name: String,
-    url: String,
-  },
+  ],
+  contest_effect: [
+    {
+      url: String,
+    },
+  ],
+  damage_class: [
+    {
+      name: String,
+      url: String,
+    },
+  ],
   effect_entries: [
     {
       effect: String,
@@ -88,26 +96,32 @@ const moveSchema = new Schema({
       url: String,
     },
   ],
-  meta: {
-    ailment: {
-      name: String,
-      url: String,
+  meta: [
+    {
+      ailment: [
+        {
+          name: String,
+          url: String,
+        },
+      ],
+      ailment_chance: Number,
+      category: [
+        {
+          name: String,
+          url: String,
+        },
+      ],
+      crit_rate: Number,
+      drain: Number,
+      flinch_chance: Number,
+      healing: Number,
+      max_hits: Number,
+      max_turns: Number,
+      min_hits: Number,
+      min_turns: Number,
+      stat_chance: Number,
     },
-    ailment_chance: Number,
-    category: {
-      name: String,
-      url: String,
-    },
-    crit_rate: Number,
-    drain: Number,
-    flinch_chance: Number,
-    healing: Number,
-    max_hits: Number,
-    max_turns: Number,
-    min_hits: Number,
-    min_turns: Number,
-    stat_chance: Number,
-  },
+  ],
   past_values: [
     {
       name: String,

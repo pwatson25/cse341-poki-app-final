@@ -1,5 +1,5 @@
-const graphql = require("graphql");
-const { createImportSpecifier } = require("typescript");
+const graphql = require('graphql');
+const { createImportSpecifier } = require('typescript');
 
 const {
   GraphQLObjectType,
@@ -12,7 +12,7 @@ const {
 } = graphql;
 
 const DetailsType = new GraphQLObjectType({
-  name: "Details",
+  name: 'Details',
   fields: () => ({
     name: { type: GraphQLString },
     url: { type: GraphQLString },
@@ -20,7 +20,7 @@ const DetailsType = new GraphQLObjectType({
 });
 
 const EffectEntriesType = new GraphQLObjectType({
-  name: "EffectEntriesType",
+  name: 'EffectEntriesType',
   fields: () => ({
     effect: { type: GraphQLString },
     language: { type: DetailsType },
@@ -29,7 +29,7 @@ const EffectEntriesType = new GraphQLObjectType({
 });
 
 const ContestCombosType = new GraphQLObjectType({
-  name: "ContestCombosType",
+  name: 'ContestCombosType',
   fields: () => ({
     normal: { type: ContestCombosTypeDetail },
     super: { type: ContestCombosTypeDetail },
@@ -37,30 +37,28 @@ const ContestCombosType = new GraphQLObjectType({
 });
 
 const ContestCombosTypeDetail = new GraphQLObjectType({
-  name: "ContestCombosTypeDetail",
+  name: 'ContestCombosTypeDetail',
   fields: () => ({
-    user_after: { type: UserAfterBeforeType },
     user_after: { type: UserAfterBeforeType },
   }),
 });
 
 const UserAfterBeforeType = new GraphQLObjectType({
-  name: "UserAfterBeforeType",
+  name: 'UserAfterBeforeType',
   fields: () => ({
-    user_before: { type: DetailsType },
     user_before: { type: DetailsType },
   }),
 });
 
 const ConetstEffectType = new GraphQLObjectType({
-  name: "ConetstEffectType",
+  name: 'ConetstEffectType',
   fields: () => ({
     url: { type: GraphQLString },
   }),
 });
 
 const MoveMetaType = new GraphQLObjectType({
-  name: "MoveMetaType",
+  name: 'MoveMetaType',
   fields: () => ({
     ailment: { type: DetailsType },
     ailment_chance: { type: GraphQLInt },
@@ -79,14 +77,14 @@ const MoveMetaType = new GraphQLObjectType({
 
 // PokemonType helper types
 const MoveListType = new GraphQLObjectType({
-  name: "MoveListType",
+  name: 'MoveListType',
   fields: () => ({
     move: { type: DetailsType },
   }),
 });
 
 const PokemonAbilitiesType = new GraphQLObjectType({
-  name: "Pokemon_abilities_list_item",
+  name: 'Pokemon_abilities_list_item',
   fields: () => ({
     ability: { type: DetailsType },
     is_hidden: { type: GraphQLBoolean },
@@ -95,14 +93,14 @@ const PokemonAbilitiesType = new GraphQLObjectType({
 });
 
 const ItemListType = new GraphQLObjectType({
-  name: "Pokemon_held_item",
+  name: 'Pokemon_held_item',
   fields: () => ({
     item: { type: DetailsType },
   }),
 });
 
 const PokemonSpeciesType = new GraphQLObjectType({
-  name: "Pokemon_species",
+  name: 'Pokemon_species',
   fields: () => ({
     slot: { type: GraphQLInt },
     species_type: { type: DetailsType },
