@@ -105,7 +105,7 @@ const PokemonType = new GraphQLObjectType({
     order: { type: GraphQLInt },
     weight: { type: GraphQLInt },
     abilities: { type: GraphQLList(PokemonAbilitiesType) },
-    forms: { type: DetailsType },
+    forms: { type: GraphQLList(DetailsType) },
     held_items: { type: GraphQLList(ItemListType) },
     location_area_encounters: { type: GraphQLString },
     moves: { type: GraphQLList(MoveListType) },
@@ -366,7 +366,7 @@ const Mutation = new GraphQLObjectType({
           ),
         },
         forms: {
-          type: new graphql.GraphQLNonNull(DetailsInputType),
+          type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
         held_items: {
           type: new graphql.GraphQLNonNull(GraphQLList(ItemListInputType)),
@@ -670,7 +670,7 @@ const Mutation = new GraphQLObjectType({
         order: { type: GraphQLInt },
         weight: { type: GraphQLInt },
         abilities: { type: PokemonAbilitiesInputType },
-        forms: { type: DetailsInputType },
+        forms: { type: GraphQLList(DetailsInputType) },
         held_items: { type: GraphQLList(ItemListInputType) },
         location_area_encounters: { type: GraphQLString },
         moves: { type: GraphQLList(MoveListInputType) },

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const pokemonSchema = new Schema({
@@ -19,10 +19,12 @@ const pokemonSchema = new Schema({
       slot: Number,
     },
   ],
-  forms: {
-    name: String,
-    url: String,
-  },
+  forms: [
+    {
+      name: String,
+      url: String,
+    },
+  ],
   held_items: [
     {
       item: {
@@ -64,4 +66,4 @@ const pokemonSchema = new Schema({
   ],
 });
 
-module.exports = mongoose.model("pokemon", pokemonSchema);
+module.exports = mongoose.model('pokemon', pokemonSchema);
