@@ -1,15 +1,15 @@
-const graphql = require('graphql');
+const graphql = require("graphql");
 const {
   createImportSpecifier,
   isExternalModuleReference,
-} = require('typescript');
-const appConfig = require('../config/app');
-const Item = require('../models/item.js');
-const Move = require('../models/move.js');
-const Pokemon = require('../models/pokemon.js');
+} = require("typescript");
+const appConfig = require("../config/app");
+const Item = require("../models/item.js");
+const Move = require("../models/move.js");
+const Pokemon = require("../models/pokemon.js");
 
-const inputTypes = require('../models/graphQLInputTypes.js');
-const outputTypes = require('../models/graphQLOutputTypes.js');
+const inputTypes = require("../models/graphQLInputTypes.js");
+const outputTypes = require("../models/graphQLOutputTypes.js");
 
 const {
   GraphQLObjectType,
@@ -51,7 +51,7 @@ const {
 
 // Types representing the collections
 const ItemType = new GraphQLObjectType({
-  name: 'Item',
+  name: "Item",
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
@@ -67,7 +67,7 @@ const ItemType = new GraphQLObjectType({
 });
 
 const MoveType = new GraphQLObjectType({
-  name: 'Move',
+  name: "Move",
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
@@ -95,7 +95,7 @@ const MoveType = new GraphQLObjectType({
 });
 
 const PokemonType = new GraphQLObjectType({
-  name: 'Pokemon',
+  name: "Pokemon",
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
@@ -117,8 +117,8 @@ const PokemonType = new GraphQLObjectType({
 
 // root query is used to perform READ operations
 const RootQuery = new GraphQLObjectType({
-  name: 'RootQueryType',
-  description: 'All GET-type queries.',
+  name: "RootQueryType",
+  description: "All GET-type queries.",
   fields: {
     getOneItem: {
       description: "Find one item. Requires the item's ID",
@@ -166,7 +166,7 @@ const RootQuery = new GraphQLObjectType({
       },
     },
     getAllItems: {
-      description: 'Returns all items.',
+      description: "Returns all items.",
       type: new graphql.GraphQLList(ItemType),
       resolve: async (root, args, context, info) => {
         try {
@@ -178,7 +178,7 @@ const RootQuery = new GraphQLObjectType({
       },
     },
     getAllMoves: {
-      description: 'Returns all moves.',
+      description: "Returns all moves.",
       type: new graphql.GraphQLList(MoveType),
       resolve: async (root, args, context, info) => {
         try {
@@ -190,11 +190,15 @@ const RootQuery = new GraphQLObjectType({
       },
     },
     getAllPokemon: {
-      description: 'Returns all Pokemon',
+      description: "Returns all Pokemon",
       type: new graphql.GraphQLList(PokemonType),
       resolve: async (root, args, context, info) => {
         try {
-          const result = await Pokemon.find();
+          const result = await Pokemon.find({});
+          for (let ele in result) {
+            console.log(result[ele]._id);
+          }
+          // console.log(result);
           return result;
         } catch (err) {
           throw err;
@@ -206,12 +210,12 @@ const RootQuery = new GraphQLObjectType({
 
 // Mutation is used to perform Create Update and Delete operations
 const Mutation = new GraphQLObjectType({
-  name: 'Mutation',
-  description: 'Used for making CREATE, PUT, and DELETE queries.',
+  name: "Mutation",
+  description: "Used for making CREATE, PUT, and DELETE queries.",
   fields: {
     addOneItem: {
       description:
-        'Add one item to the Items collection. All fields are required, except ID which is auto-generated. Returns the created item.',
+        "Add one item to the Items collection. All fields are required, except ID which is auto-generated. Returns the created item.",
       type: ItemType,
       args: {
         name: { type: new graphql.GraphQLNonNull(GraphQLString) },
@@ -261,7 +265,7 @@ const Mutation = new GraphQLObjectType({
     },
     addOneMove: {
       description:
-        'Add one item to the Moves collection. All fields are required, except ID which is auto-generated. Returns the created move.',
+        "Add one item to the Moves collection. All fields are required, except ID which is auto-generated. Returns the created move.",
       type: MoveType,
       args: {
         name: { type: new graphql.GraphQLNonNull(GraphQLString) },
@@ -351,7 +355,7 @@ const Mutation = new GraphQLObjectType({
     },
     addOnePokemon: {
       description:
-        'Add one item to the Pokemons collection. All fields are required, except ID which is auto-generated. Returns the created pokemon.',
+        "Add one item to the Pokemons collection. All fields are required, except ID which is auto-generated. Returns the created pokemon.",
       type: PokemonType,
       args: {
         name: { type: new graphql.GraphQLNonNull(GraphQLString) },
@@ -415,7 +419,7 @@ const Mutation = new GraphQLObjectType({
     },
     updateOneItem: {
       description:
-        'Update one item in the Items collection. Only the ID is required.',
+        "Update one item in the Items collection. Only the ID is required.",
       type: ItemType,
       args: {
         id: { type: graphql.GraphQLNonNull(GraphQLID) },
@@ -499,7 +503,7 @@ const Mutation = new GraphQLObjectType({
     },
     updateOneMove: {
       description:
-        'Update one move in the Moves collection. Only the ID is required.',
+        "Update one move in the Moves collection. Only the ID is required.",
       type: MoveType,
       args: {
         id: { type: graphql.GraphQLNonNull(GraphQLID) },
@@ -659,7 +663,7 @@ const Mutation = new GraphQLObjectType({
     },
     updateOnePokemon: {
       description:
-        'Update one item in the Pokemons collection. Only the ID is required.',
+        "Update one item in the Pokemons collection. Only the ID is required.",
       type: PokemonType,
       args: {
         id: { type: graphql.GraphQLNonNull(GraphQLID) },
@@ -782,7 +786,7 @@ const Mutation = new GraphQLObjectType({
     },
     removeOneItem: {
       description:
-        'Deletes the specified Item from the Items collection. Requires the ID.',
+        "Deletes the specified Item from the Items collection. Requires the ID.",
       type: ItemType,
       args: {
         id: { type: GraphQLID },
@@ -802,7 +806,7 @@ const Mutation = new GraphQLObjectType({
     },
     removeOneMove: {
       description:
-        'Deletes the specified Move from the Moves collection. Requires the ID.',
+        "Deletes the specified Move from the Moves collection. Requires the ID.",
       type: MoveType,
       args: {
         id: { type: GraphQLID },
@@ -822,7 +826,7 @@ const Mutation = new GraphQLObjectType({
     },
     removeOnePokemon: {
       description:
-        'Deletes the specified Pokemon from the Pokemons collection. Requires the ID.',
+        "Deletes the specified Pokemon from the Pokemons collection. Requires the ID.",
       type: PokemonType,
       args: {
         id: { type: GraphQLID },

@@ -1,8 +1,7 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const pokemonSchema = new Schema({
-  id: Number,
   name: String,
   base_experience: Number,
   height: Number,
@@ -66,4 +65,4 @@ const pokemonSchema = new Schema({
   ],
 });
 
-module.exports = mongoose.model('pokemon', pokemonSchema);
+module.exports = mongoose.model("pokemon", pokemonSchema);
