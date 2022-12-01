@@ -4,6 +4,8 @@ const {
   isExternalModuleReference,
 } = require("typescript");
 const User = require("../../models/User.js");
+const Pokemon = require("../../models/pokemon.js");
+const Item = require("../../models/item.js");
 
 async function getOneUserPokemon(root, args, context, info) {
   try {
