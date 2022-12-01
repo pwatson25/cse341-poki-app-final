@@ -7,6 +7,7 @@ const appConfig = require("../config/app");
 const Item = require("../models/item.js");
 const Move = require("../models/move.js");
 const Pokemon = require("../models/pokemon.js");
+const User = require("../models/User.js");
 
 const inputTypes = require("../models/graphQLInputTypes.js");
 const outputTypes = require("../models/graphQLOutputTypes.js");
@@ -19,6 +20,7 @@ const {
   GraphQLSchema,
   GraphQLBoolean,
   GraphQLList,
+  y,
 } = graphql;
 
 // These must be used when making new base types
@@ -115,6 +117,20 @@ const PokemonType = new GraphQLObjectType({
   }),
 });
 
+const UserType = new GraphQLObjectType({
+  name: "User",
+  fields: () => ({
+    identifier: { type: GraphQLString },
+    email: { type: GraphQLString },
+    givenName: { type: GraphQLString },
+    familyName: { type: GraphQLString },
+    locale: { type: GraphQLString },
+    picture: { type: GraphQLString },
+    pokemon: { type: GraphQLList(PokemonType) },
+    itemInventory: { type: GraphQLList(ItemType) },
+  }),
+});
+
 // root query is used to perform READ operations
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
@@ -165,6 +181,50 @@ const RootQuery = new GraphQLObjectType({
         }
       },
     },
+    getOneUserPokemon: {
+      description:
+        "Find one pokemon from the user's stored pokemon. Requires the pokemon's ID",
+      type: PokemonType,
+      args: { id: { type: GraphQLID } },
+      resolve: async (root, args, context, info) => {
+        try {
+          let foundUser = await User.findOne({
+            identifier: context.identifier,
+          });
+
+          for (let poke in foundUser.pokemon) {
+            let stored_id = foundUser.pokemon[poke];
+            if (stored_id == args.id) {
+              return await Pokemon.findOne({ _id: stored_id });
+            }
+          }
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
+    getOneUserItem: {
+      description:
+        "Find one item from the user's inventory. Requires the item's ID",
+      type: ItemType,
+      args: { id: { type: GraphQLID } },
+      resolve: async (root, args, context, info) => {
+        try {
+          let foundUser = await User.findOne({
+            identifier: context.identifier,
+          });
+
+          for (let item in foundUser.itemInventory) {
+            let stored_id = foundUser.itemInventory[item];
+            if (stored_id == args.id) {
+              return await Item.findOne({ _id: stored_id });
+            }
+          }
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
     getAllItems: {
       description: "Returns all items.",
       type: new graphql.GraphQLList(ItemType),
@@ -195,11 +255,53 @@ const RootQuery = new GraphQLObjectType({
       resolve: async (root, args, context, info) => {
         try {
           const result = await Pokemon.find({});
-          for (let ele in result) {
-            console.log(result[ele]._id);
-          }
-          // console.log(result);
           return result;
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
+    getAllUserPokemon: {
+      description: "Returns all Pokemon the User owns",
+      type: new graphql.GraphQLList(PokemonType),
+      // type: UserType,
+      resolve: async (root, args, context, info) => {
+        try {
+          let foundUser = await User.findOne({
+            identifier: context.identifier,
+          });
+          // console.log(foundUser.pokemon);
+
+          let foundPokemon = [];
+          for (let poke in foundUser.pokemon) {
+            let stored_id = foundUser.pokemon[poke];
+            foundPokemon.push(await Pokemon.findOne({ _id: stored_id }));
+          }
+          // console.log(foundPokemon);
+          return foundPokemon;
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
+    getAllUserItems: {
+      description: "Returns all Pokemon the User owns",
+      type: new graphql.GraphQLList(ItemType),
+      // type: UserType,
+      resolve: async (root, args, context, info) => {
+        try {
+          let foundUser = await User.findOne({
+            identifier: context.identifier,
+          });
+          // console.log(foundUser.pokemon);
+
+          let foundItems = [];
+          for (let item in foundUser.itemInventory) {
+            let stored_id = foundUser.itemInventory[item];
+            foundItems.push(await Item.findOne({ _id: stored_id }));
+          }
+          // console.log(foundPokemon);
+          return foundItems;
         } catch (err) {
           throw err;
         }
@@ -412,6 +514,48 @@ const Mutation = new GraphQLObjectType({
           });
           const newPokemon = await pokemon.save();
           return { ...newPokemon._doc, _id: newPokemon.id };
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
+    addOneUserPokemon: {
+      description:
+        "Add one item to the Pokemons collection. All fields are required, except ID which is auto-generated. Returns the created pokemon.",
+      type: UserType,
+      args: {
+        id: { type: new graphql.GraphQLNonNull(GraphQLID) },
+      },
+      resolve: async (root, args, context, info) => {
+        try {
+          let foundUser = await User.findOne({
+            identifier: context.identifier,
+          });
+          let foundPokemon = await Pokemon.findOne({ _id: args.id });
+          foundUser.pokemon.push(foundPokemon);
+          foundUser.save();
+          return { ...foundUser.pokemon };
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
+    addOneUserItem: {
+      description:
+        "Add one item to the Pokemons collection. All fields are required, except ID which is auto-generated. Returns the created pokemon.",
+      type: UserType,
+      args: {
+        id: { type: new graphql.GraphQLNonNull(GraphQLID) },
+      },
+      resolve: async (root, args, context, info) => {
+        try {
+          let foundUser = await User.findOne({
+            identifier: context.identifier,
+          });
+          let foundItem = await Item.findOne({ _id: args.id });
+          foundUser.itemInventory.push(foundItem);
+          foundUser.save();
+          return { ...foundUser.itemInventory };
         } catch (err) {
           throw err;
         }
@@ -839,6 +983,76 @@ const Mutation = new GraphQLObjectType({
             ...deletedPokemon._doc,
             _id: deletedPokemon.id,
           };
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
+    removeOneUserPokemon: {
+      description:
+        "Add one item to the Pokemons collection. All fields are required, except ID which is auto-generated. Returns the created pokemon.",
+      type: UserType,
+      args: {
+        id: { type: new graphql.GraphQLNonNull(GraphQLID) },
+      },
+      resolve: async (root, args, context, info) => {
+        try {
+          let foundUser = await User.findOne({
+            identifier: context.identifier,
+          });
+
+          let ogList = foundUser.pokemon;
+          let newPokemonList = ogList.filter(function (value, index, arr) {
+            return value != args.id;
+          });
+
+          let itemsToRemove = ogList.filter(function (value, index, arr) {
+            return value == args.id;
+          });
+          if (itemsToRemove.length > 1) {
+            itemsToRemove.splice(0, 1);
+            for (let i = 0; i < itemsToRemove.length; i++) {
+              newPokemonList.push(itemsToRemove[i]);
+            }
+          }
+          foundUser.pokemon = newPokemonList;
+          foundUser.save();
+          return { ...foundUser.pokemon };
+        } catch (err) {
+          throw err;
+        }
+      },
+    },
+    removeOneUserItem: {
+      description:
+        "Add one item to the Pokemons collection. All fields are required, except ID which is auto-generated. Returns the created pokemon.",
+      type: UserType,
+      args: {
+        id: { type: new graphql.GraphQLNonNull(GraphQLID) },
+      },
+      resolve: async (root, args, context, info) => {
+        try {
+          let foundUser = await User.findOne({
+            identifier: context.identifier,
+          });
+
+          let ogList = foundUser.itemInventory;
+          let newItemList = ogList.filter(function (value, index, arr) {
+            return value != args.id;
+          });
+
+          let itemsToRemove = ogList.filter(function (value, index, arr) {
+            return value == args.id;
+          });
+          if (itemsToRemove.length > 1) {
+            itemsToRemove.splice(0, 1);
+            for (let i = 0; i < itemsToRemove.length; i++) {
+              newItemList.push(itemsToRemove[i]);
+            }
+          }
+          foundUser.itemInventory = newItemList;
+          foundUser.save();
+          return { ...foundUser.itemInventory };
         } catch (err) {
           throw err;
         }
