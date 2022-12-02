@@ -5,7 +5,8 @@ const schema = require('../controllers/schema');
 
 const loadUser = require('../middleware/loadUser');
 
-router.use([loadUser]).use(
+router.use([loadUser]);
+router.use(
   '/',
   graphqlHTTP(async (req) => ({
     schema,
