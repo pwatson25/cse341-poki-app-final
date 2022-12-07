@@ -36,17 +36,31 @@ describe("Test my queries, mutations and subscriptions", () => {
     });
   });
 
-  //   If invalid pokdemon id, it passes
-  describe("Should pass if the query is invalid", () => {
-    it("passes if the pokemon is invalid", () => {
+  //   If valid pokdemon id, it passes
+  describe("Should pass if the query is valid", () => {
+    it("passes if the pokemon is valid", () => {
       const validQuery = `
-    query GetAllPokemon {
-      getOnePokemon(_id: "") {
+      query GetOnePokemon {
+        getOnePokemon(id: "6382634656c2e25495010ec5") {
           name
+        }
       }
-  }
       `;
-      tester.test(false, validQuery);
+      tester.test(true, validQuery);
+    });
+  });
+
+  // if invalid pokemon id, it passes
+  describe("Should pass if the query is valid", () => {
+    it("passes if the pokemon is valid", () => {
+      const validQuery = `
+      query GetOnePokemon {
+        getOnePokemon(id: "6382634656c2e25495010ec5") {
+          name
+        }
+      }
+      `;
+      tester.test(true, validQuery);
     });
   });
 });
