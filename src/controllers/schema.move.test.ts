@@ -49,3 +49,5 @@ it('Should not get all moves', () => {
     `;
   tester.test(false, query);
 });
+
+export {};
