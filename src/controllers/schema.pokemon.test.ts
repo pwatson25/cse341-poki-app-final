@@ -1,7 +1,7 @@
 const EasyGraphQLTester = require('easygraphql-tester');
 const schemaCode = require('./schema');
 
-let tester;
+let tester:any;
 beforeAll(() => {
   tester = new EasyGraphQLTester(schemaCode);
 });
@@ -49,3 +49,5 @@ it('Should not get all pokemon', () => {
     `;
   tester.test(false, query);
 });
+
+export {};

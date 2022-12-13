@@ -66,3 +66,5 @@ const pokemonSchema = new Schema({
 });
 
 module.exports = mongoose.model("pokemon", pokemonSchema);
+
+export {};

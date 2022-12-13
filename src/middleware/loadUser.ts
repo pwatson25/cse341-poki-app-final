@@ -1,7 +1,7 @@
 const appConfig = require('../config/app');
 const User = require('../config/models/User');
 
-const loadUser = async (req, res, next) => {
+const loadUser = async (req:any, res:any, next:any) => {
   if (!req.headers.authorization) {
     next();
   }
@@ -12,7 +12,7 @@ const loadUser = async (req, res, next) => {
   next();
 };
 
-const findOrCreateUser = async (authZeroUserJson) => {
+const findOrCreateUser = async (authZeroUserJson:any) => {
   if (!authZeroUserJson) return;
 
   const existingUser = await User.findOne({ identifier: authZeroUserJson.sub });
@@ -31,7 +31,7 @@ const findOrCreateUser = async (authZeroUserJson) => {
   return newUser;
 };
 
-const fetchAuthZeroUser = async (token) => {
+const fetchAuthZeroUser = async (token:any) => {
   if (token == undefined || !token) {
     return null;
   }
@@ -44,3 +44,5 @@ const fetchAuthZeroUser = async (token) => {
 };
 
 module.exports = loadUser;
+
+export {};

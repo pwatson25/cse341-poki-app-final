@@ -145,7 +145,7 @@ const RootQuery = new GraphQLObjectType({
       description: "Find one item. Requires the item's ID",
       type: ItemType,
       args: { id: { type: GraphQLID } },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return itemResolvers.getOneItem(root, args, context, info);
       },
     },
@@ -153,7 +153,7 @@ const RootQuery = new GraphQLObjectType({
       description: "Find one move. Requires the move's ID",
       type: MoveType,
       args: { id: { type: GraphQLID } },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return moveResolvers.getOneMove(root, args, context, info);
       },
     },
@@ -163,7 +163,7 @@ const RootQuery = new GraphQLObjectType({
       args: {
         id: { type: new graphql.GraphQLNonNull(GraphQLID) },
       },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return pokemonResolvers.getOnePokemon(root, args, context, info);
       },
     },
@@ -172,7 +172,7 @@ const RootQuery = new GraphQLObjectType({
         "Find one pokemon from the user's stored pokemon. Requires the pokemon's ID",
       type: PokemonType,
       args: { id: { type: GraphQLID } },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return userResolvers.getOneUserPokemon(root, args, context, info);
       },
     },
@@ -181,28 +181,28 @@ const RootQuery = new GraphQLObjectType({
         "Find one item from the user's inventory. Requires the item's ID",
       type: ItemType,
       args: { id: { type: GraphQLID } },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return userResolvers.getOneUserItem(root, args, context, info);
       },
     },
     getAllItems: {
       description: 'Returns all items.',
       type: new graphql.GraphQLList(ItemType),
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return itemResolvers.getAllItems(root, args, context, info);
       },
     },
     getAllMoves: {
       description: 'Returns all moves.',
       type: new graphql.GraphQLList(MoveType),
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return moveResolvers.getAllMoves(root, args, context, info);
       },
     },
     getAllPokemon: {
       description: 'Returns all Pokemon',
       type: new graphql.GraphQLList(PokemonType),
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return pokemonResolvers.getAllPokemon(root, args, context, info);
       },
     },
@@ -210,7 +210,7 @@ const RootQuery = new GraphQLObjectType({
       description: 'Returns all Pokemon the User owns',
       type: new graphql.GraphQLList(PokemonType),
       // type: UserType,
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return userResolvers.getAllUserPokemon(root, args, context, info);
       },
     },
@@ -218,7 +218,7 @@ const RootQuery = new GraphQLObjectType({
       description: 'Returns all Items the User owns',
       type: new graphql.GraphQLList(ItemType),
       // type: UserType,
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return userResolvers.getAllUserItems(root, args, context, info);
       },
     },
@@ -257,7 +257,7 @@ const Mutation = new GraphQLObjectType({
           type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
       },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return itemResolvers.addOneItem(root, args, context, info);
       },
     },
@@ -318,7 +318,7 @@ const Mutation = new GraphQLObjectType({
           type: new graphql.GraphQLNonNull(GraphQLList(DetailsInputType)),
         },
       },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return moveResolvers.addOneMove(root, args, context, info);
       },
     },
@@ -360,7 +360,7 @@ const Mutation = new GraphQLObjectType({
           type: new graphql.GraphQLNonNull(PokemonSpeciesInputType),
         },
       },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return pokemonResolvers.addOnePokemon(root, args, context, info);
       },
     },
@@ -371,7 +371,7 @@ const Mutation = new GraphQLObjectType({
       args: {
         id: { type: new graphql.GraphQLNonNull(GraphQLID) },
       },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return userResolvers.addOneUserPokemon(root, args, context, info);
       },
     },
@@ -382,7 +382,7 @@ const Mutation = new GraphQLObjectType({
       args: {
         id: { type: new graphql.GraphQLNonNull(GraphQLID) },
       },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return userResolvers.addOneUserItem(root, args, context, info);
       },
     },
@@ -402,7 +402,7 @@ const Mutation = new GraphQLObjectType({
         baby_trigger_for: { type: GraphQLList(DetailsInputType) },
         machines: { type: GraphQLList(DetailsInputType) },
       },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return itemResolvers.updateOneItem(root, args, context, info);
       },
     },
@@ -434,7 +434,7 @@ const Mutation = new GraphQLObjectType({
         target: { type: GraphQLList(DetailsInputType) },
         type: { type: GraphQLList(DetailsInputType) },
       },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return moveResolvers.updateOneMove(root, args, context, info);
       },
     },
@@ -459,7 +459,7 @@ const Mutation = new GraphQLObjectType({
         species: { type: DetailsInputType },
         types: { type: PokemonSpeciesInputType },
       },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return pokemonResolvers.updateOnePokemon(root, args, context, info);
       },
     },
@@ -470,7 +470,7 @@ const Mutation = new GraphQLObjectType({
       args: {
         id: { type: GraphQLID },
       },
-      resolve: async (parent, args, context, info) => {
+      resolve: async (parent:any, args:any, context:any, info:any) => {
         return itemResolvers.removeOneItem(parent, args, context, info);
       },
     },
@@ -481,7 +481,7 @@ const Mutation = new GraphQLObjectType({
       args: {
         id: { type: GraphQLID },
       },
-      resolve: async (parent, args, context, info) => {
+      resolve: async (parent:any, args:any, context:any, info:any) => {
         return moveResolvers.removeOneMove(parent, args, context, info);
       },
     },
@@ -492,7 +492,7 @@ const Mutation = new GraphQLObjectType({
       args: {
         id: { type: GraphQLID },
       },
-      resolve: async (parent, args, context, info) => {
+      resolve: async (parent:any, args:any, context:any, info:any) => {
         return pokemonResolvers.removeOnePokemon(parent, args, context, info);
       },
     },
@@ -502,7 +502,7 @@ const Mutation = new GraphQLObjectType({
       args: {
         id: { type: new graphql.GraphQLNonNull(GraphQLID) },
       },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return userResolvers.removeOneUserPokemon(root, args, context, info);
       },
     },
@@ -512,7 +512,7 @@ const Mutation = new GraphQLObjectType({
       args: {
         id: { type: new graphql.GraphQLNonNull(GraphQLID) },
       },
-      resolve: async (root, args, context, info) => {
+      resolve: async (root:any, args:any, context:any, info:any) => {
         return userResolvers.removeOneUserItem(root, args, context, info);
       },
     },
@@ -524,3 +524,5 @@ module.exports = new GraphQLSchema({
   query: RootQuery,
   mutation: Mutation,
 });
+
+export{};

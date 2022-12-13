@@ -4,7 +4,7 @@ const {
 } = require("typescript");
 const Item = require("../../models/item.js");
 
-async function getOneItem(root, args, context, info) {
+async function getOneItem(root:any, args:any, context:any, info:any) {
   try {
     let foundItem = await Item.findOne({
       _id: args.id,
@@ -15,7 +15,7 @@ async function getOneItem(root, args, context, info) {
   }
 }
 
-async function getAllItems(root, args, context, info) {
+async function getAllItems(root:any, args:any, context:any, info:any) {
   try {
     const result = await Item.find();
     return result;
@@ -24,7 +24,7 @@ async function getAllItems(root, args, context, info) {
   }
 }
 
-async function addOneItem(root, args, context, info) {
+async function addOneItem(root:any, args:any, context:any, info:any) {
   try {
     const item = new Item({
       //   populate the mongoDB item with args provided by the user
@@ -47,7 +47,7 @@ async function addOneItem(root, args, context, info) {
   }
 }
 
-async function updateOneItem(root, args, context, info) {
+async function updateOneItem(root:any, args:any, context:any, info:any) {
   try {
     const formerItem = await Item.findById(args.id);
     // "args" stores the user input, use it to update Item's properties
@@ -115,7 +115,7 @@ async function updateOneItem(root, args, context, info) {
   }
 }
 
-async function removeOneItem(root, args, context, info) {
+async function removeOneItem(root:any, args:any, context:any, info:any) {
   try {
     const item = await Item.findById(args.id);
     const deletedItem = await Item.findByIdAndDelete(args.id);
@@ -135,3 +135,5 @@ module.exports = {
   updateOneItem,
   removeOneItem,
 };
+
+export {};

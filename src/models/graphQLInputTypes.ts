@@ -121,3 +121,5 @@ module.exports = {
   ItemListInputType,
   PokemonSpeciesInputType,
 };
+
+export {};

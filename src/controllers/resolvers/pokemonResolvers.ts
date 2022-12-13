@@ -4,7 +4,7 @@ const {
 } = require("typescript");
 const Pokemon = require("../../models/pokemon.js");
 
-async function getOnePokemon(root, args, context, info) {
+async function getOnePokemon(root:any, args:any, context:any, info:any) {
   try {
     let foundPokemon = await Pokemon.findOne({
       _id: args.id,
@@ -15,7 +15,7 @@ async function getOnePokemon(root, args, context, info) {
   }
 }
 
-async function getAllPokemon(root, args, context, info) {
+async function getAllPokemon(root:any, args:any, context:any, info:any) {
   try {
     const result = await Pokemon.find({});
     return result;
@@ -24,7 +24,7 @@ async function getAllPokemon(root, args, context, info) {
   }
 }
 
-async function addOnePokemon(root, args, context, info) {
+async function addOnePokemon(root:any, args:any, context:any, info:any) {
   try {
     const pokemon = new Pokemon({
       // populate the mongoDB item with args
@@ -50,7 +50,7 @@ async function addOnePokemon(root, args, context, info) {
   }
 }
 
-async function updateOnePokemon(root, args, context, info) {
+async function updateOnePokemon(root:any, args:any, context:any, info:any) {
   try {
     const formerPokemon = await Pokemon.findById(args.id);
     // "args" stores the user input, use it to update Item's properties
@@ -151,7 +151,7 @@ async function updateOnePokemon(root, args, context, info) {
   }
 }
 
-async function removeOnePokemon(root, args, context, info) {
+async function removeOnePokemon(root:any, args:any, context:any, info:any) {
   try {
     const pokemon = await Pokemon.findById(args.id);
     const deletedPokemon = await Pokemon.findByIdAndDelete(args.id);
@@ -171,3 +171,5 @@ module.exports = {
   updateOnePokemon,
   removeOnePokemon,
 };
+
+export{};

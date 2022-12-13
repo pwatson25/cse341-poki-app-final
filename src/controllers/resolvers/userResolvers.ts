@@ -6,7 +6,7 @@ const User = require("../../models/User.js");
 const Pokemon = require("../../models/pokemon.js");
 const Item = require("../../models/item.js");
 
-async function getOneUserPokemon(root, args, context, info) {
+async function getOneUserPokemon(root:any, args:any, context:any, info:any) {
   try {
     let foundUser = await User.findOne({
       identifier: context.identifier,
@@ -23,7 +23,7 @@ async function getOneUserPokemon(root, args, context, info) {
   }
 }
 
-async function getAllUserPokemon(root, args, context, info) {
+async function getAllUserPokemon(root:any, args:any, context:any, info:any) {
   try {
     let foundUser = await User.findOne({
       identifier: context.identifier,
@@ -42,7 +42,7 @@ async function getAllUserPokemon(root, args, context, info) {
   }
 }
 
-async function addOneUserPokemon(root, args, context, info) {
+async function addOneUserPokemon(root:any, args:any, context:any, info:any) {
   try {
     let foundUser = await User.findOne({
       identifier: context.identifier,
@@ -56,18 +56,18 @@ async function addOneUserPokemon(root, args, context, info) {
   }
 }
 
-async function removeOneUserPokemon(root, args, context, info) {
+async function removeOneUserPokemon(root:any, args:any, context:any, info:any) {
   try {
     let foundUser = await User.findOne({
       identifier: context.identifier,
     });
 
     let ogList = foundUser.pokemon;
-    let newPokemonList = ogList.filter(function (value, index, arr) {
+    let newPokemonList = ogList.filter(function (root:any, args:any, context:any, info:any) {
       return value != args.id;
     });
 
-    let itemsToRemove = ogList.filter(function (value, index, arr) {
+    let itemsToRemove = ogList.filter(function (root:any, args:any, context:any, info:any) {
       return value == args.id;
     });
     if (itemsToRemove.length > 1) {
@@ -84,7 +84,7 @@ async function removeOneUserPokemon(root, args, context, info) {
   }
 }
 
-async function getOneUserItem(root, args, context, info) {
+async function getOneUserItem(root:any, args:any, context:any, info:any) {
   try {
     let foundUser = await User.findOne({
       identifier: context.identifier,
@@ -101,7 +101,7 @@ async function getOneUserItem(root, args, context, info) {
   }
 }
 
-async function getAllUserItems(root, args, context, info) {
+async function getAllUserItems(root:any, args:any, context:any, info:any) {
   try {
     let foundUser = await User.findOne({
       identifier: context.identifier,
@@ -120,7 +120,7 @@ async function getAllUserItems(root, args, context, info) {
   }
 }
 
-async function addOneUserItem(root, args, context, info) {
+async function addOneUserItem(root:any, args:any, context:any, info:any) {
   try {
     let foundUser = await User.findOne({
       identifier: context.identifier,
@@ -134,18 +134,18 @@ async function addOneUserItem(root, args, context, info) {
   }
 }
 
-async function removeOneUserItem(root, args, context, info) {
+async function removeOneUserItem(root:any, args:any, context:any, info:any) {
   try {
     let foundUser = await User.findOne({
       identifier: context.identifier,
     });
 
     let ogList = foundUser.itemInventory;
-    let newItemList = ogList.filter(function (value, index, arr) {
+    let newItemList = ogList.filter(function (value:any, index:any, arr:any) {
       return value != args.id;
     });
 
-    let itemsToRemove = ogList.filter(function (value, index, arr) {
+    let itemsToRemove = ogList.filter(function (value:any, index:any, arr:any) {
       return value == args.id;
     });
     if (itemsToRemove.length > 1) {
@@ -172,3 +172,5 @@ module.exports = {
   addOneUserItem,
   removeOneUserItem,
 };
+
+export{};

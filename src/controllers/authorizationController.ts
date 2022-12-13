@@ -1,7 +1,7 @@
 const appConfig = require('../config/app');
 
 const AuthorizationController = {
-  login: (req, res) => {
+  login: (req:any, res:any) => {
     const authorizationUrl = `${
       appConfig.authorizationHost
     }/authorize?response_type=code&client_id=${
@@ -12,7 +12,7 @@ const AuthorizationController = {
 
     res.redirect(authorizationUrl);
   },
-  callback: async (req, res) => {
+  callback: async (req:any, res:any) => {
     const response = await fetch(`${appConfig.authorizationHost}/oauth/token`, {
       method: 'POST',
       headers: {
@@ -34,3 +34,5 @@ const AuthorizationController = {
 };
 
 module.exports = AuthorizationController;
+
+export{};

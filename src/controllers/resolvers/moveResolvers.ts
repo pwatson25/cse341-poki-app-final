@@ -4,7 +4,7 @@ const {
 } = require("typescript");
 const Move = require("../../models/move.js");
 
-async function getOneMove(root, args, context, info) {
+async function getOneMove(root:any, args:any, context:any, info:any) {
   try {
     let foundMove = await Move.findOne({
       _id: args.id,
@@ -15,7 +15,7 @@ async function getOneMove(root, args, context, info) {
   }
 }
 
-async function getAllMoves(root, args, context, info) {
+async function getAllMoves(root:any, args:any, context:any, info:any) {
   try {
     const result = await Move.find();
     return result;
@@ -24,7 +24,7 @@ async function getAllMoves(root, args, context, info) {
   }
 }
 
-async function addOneMove(root, args, context, info) {
+async function addOneMove(root:any, args:any, context:any, info:any) {
   try {
     const move = new Move({
       // populate the mongoDB item with args
@@ -57,7 +57,7 @@ async function addOneMove(root, args, context, info) {
   }
 }
 
-async function updateOneMove(root, args, context, info) {
+async function updateOneMove(root:any, args:any, context:any, info:any) {
   try {
     const formerMove = await Move.findById(args.id);
     // "args" stores the user input, use it to update Item's properties
@@ -189,7 +189,7 @@ async function updateOneMove(root, args, context, info) {
   }
 }
 
-async function removeOneMove(root, args, context, info) {
+async function removeOneMove(root:any, args:any, context:any, info:any) {
   try {
     const move = await Move.findById(args.id);
     const deletedMove = await Move.findByIdAndDelete(args.id);
@@ -209,3 +209,5 @@ module.exports = {
   updateOneMove,
   removeOneMove,
 };
+
+export{};

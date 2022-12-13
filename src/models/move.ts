@@ -153,3 +153,5 @@ const moveSchema = new Schema({
 });
 
 module.exports = mongoose.model("move", moveSchema);
+
+export {};
